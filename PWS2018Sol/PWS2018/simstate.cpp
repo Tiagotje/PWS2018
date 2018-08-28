@@ -11,7 +11,7 @@
 
 void dab();
 
-static int lengte = 1;
+static int lengte = 20;
 
 SimState::SimState()
 {
@@ -43,9 +43,9 @@ void SimState::calculate() {  }
 
 void dab()
 {
-	std::cout << "Mijn penis is zo lang:" << std::endl;
+	std::cout << "Mijn penis is zo kort :( :" << std::endl;
 	std::cout << "8";
-	for (int i = 0; i < lengte; i++)
+	for (int i = lengte; i > 0; i--)
 		std::cout << "=";
 	std::cout << "D" << std::endl;
 	lengte++;

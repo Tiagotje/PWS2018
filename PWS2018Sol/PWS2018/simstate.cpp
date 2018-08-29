@@ -5,13 +5,10 @@
 
 #include "main.hpp"
 #include "terrain.hpp"
-#include "fonts.hpp"
+#include "util.hpp"
 #include "button.hpp"
-#include "fonts.hpp"
 
 void dab();
-
-static int lengte = 20;
 
 SimState::SimState()
 {
@@ -31,7 +28,7 @@ SimState::SimState()
 	//De testknop
 	but.setView(upperView);
 	but.setFont(Util::dafont);
-	but.setText("PENIS", 25);
+	but.setText("D E R P", 25);
 	but.setSize(sf::FloatRect(150, 5, 100, 35));
 	but.setFunc(dab);
 	but.setColor(sf::Color::Black);
@@ -43,18 +40,13 @@ void SimState::calculate() {  }
 
 void dab()
 {
-	std::cout << "Mijn penis is zo kort :( :" << std::endl;
-	std::cout << "8";
-	for (int i = lengte; i > 0; i--)
-		std::cout << "=";
-	std::cout << "D" << std::endl;
-	lengte++;
+	std::cout << "Dit doet niets!!" << std::endl;
 }
 
 
 void SimState::draw()
 {
-	window.clear(sf::Color(75, 100, 255));		// (115,170,255) = RGB lichtblauw
+	window.clear(sf::Color(75, 100, 255));
 
 	//tekent map
 	window.setView(mapView);

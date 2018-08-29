@@ -6,7 +6,7 @@
 #include <SFML/Graphics.hpp>
 
 #include "main.hpp"
-#include "fonts.hpp"
+#include "util.hpp"
 
 //lege constructor
 Button::Button() { }

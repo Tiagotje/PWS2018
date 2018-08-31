@@ -2,6 +2,7 @@
 
 #include "state.hpp"
 #include "button.hpp"
+#include "physics.hpp"
 #include <SFML/Graphics.hpp>
 
 class SimState : public State {
@@ -14,6 +15,6 @@ public:
 private:
 	sf::View mapView, lowerView, upperView;
 	sf::VertexArray ground;
-
+	BallObject bal = BallObject(0, -100);
 	Button but;
 };

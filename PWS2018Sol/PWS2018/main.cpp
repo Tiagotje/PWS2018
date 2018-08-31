@@ -11,11 +11,16 @@
 #include "state.hpp"
 #include "simstate.hpp"
 #include "util.hpp"
+#include "physics.hpp"
 
 
 sf::RenderWindow window;
 
 State * state;
+
+//VERGEET NIET!!
+//SCHAAL VERSCHIL, WEGENS WISKUNDE SHIT
+//1 UNIT IN BOX2D = 100 UNITS IN SFML!!
 
 int main()
 {
@@ -24,13 +29,13 @@ int main()
 	window.create(sf::VideoMode(1600, 900), "SFML works!", sf::Style::Titlebar | sf::Style::Close);
 	state = new SimState();
 
-	Util::initPhysics();
+	Phys::initPhysics();
 
 	while (window.isOpen())
 	{
 		state->events();
 		state->calculate();
-		Util::updatePhysics();
+		Phys::updatePhysics(500.0f);
 		state->draw();
 		window.display();
 	}

@@ -51,6 +51,7 @@ void SimState::draw()
 	//tekent map
 	window.setView(mapView);
 	window.draw(ground);
+	bal.draw();
 
 	//Tekent onderkant
 	sf::RectangleShape rect(sf::Vector2f(1600, 90));
@@ -94,6 +95,9 @@ void SimState::events()
 		{
 			sf::Vector2i pos = sf::Mouse::getPosition(window);
 			but.checkMouse(pos);
+			window.setView(mapView);
+			sf::Vector2f worldPos = window.mapPixelToCoords(pos);
+			std::cout << "X: " << worldPos.x << " Y: " << worldPos.y << std::endl;
 		}
 	}
 }

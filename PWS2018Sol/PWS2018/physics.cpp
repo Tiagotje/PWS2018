@@ -9,7 +9,6 @@ b2Vec2 grav(0.0f, -10.0f);
 b2World Phys::world(grav);
 
 bool initPhys = false;
-int iter = 0;
 
 void Phys::initPhysics() {
 	if (initPhys)
@@ -23,24 +22,16 @@ void Phys::initPhysics() {
 	//Define body with position, damping etc
 	b2BodyDef groundBodyDef;
 	groundBodyDef.position.Set(0.0f, 0.0f);
-	groundBodyDef.fixedRotation = true;
-	//groundBodyDef.angle = 10.f;
 	//Use world to create body
 	groundBody = world.CreateBody(&groundBodyDef);
-	//Define fixtures with shape
-	b2PolygonShape groundBox;
-	groundBox.SetAsBox(50.0f, 10.0f);
-	//Create fixture on body
-	groundBody->CreateFixture(&groundBox, 0.0f);
 }
 
 void Phys::updatePhysics(float fps) {
 	int32 velocityIterations = 10; //6
 	int32 positionIterations = 4;  //2
-
 	world.Step(1.0f / fps, velocityIterations, positionIterations);
-
-	iter++;
+	if (iter % (7000) == 0)
+		std::cout << iter << " FPS: " << FPS << std::endl;
 }
 
 //Body = object,  bodydef = hoe het werkt & plaats
@@ -58,6 +49,7 @@ b2Body * Phys::genBall(float x, float y, float r) {
 	fd.shape = &cs;
 	fd.density = 1.0f;
 	fd.friction = 0.3f;
+	fd.restitution = 0.2f;
 	ball->CreateFixture(&fd);
 	return ball;
 }
@@ -65,11 +57,17 @@ b2Body * Phys::genBall(float x, float y, float r) {
 BallObject::BallObject(float x, float y){
 	body = Phys::genBall(x, y, 1);
 	shape = sf::CircleShape(10);
+	shape.setOrigin({10,10});
 	shape.setFillColor(sf::Color(250, 50, 50));
 }
 
 void BallObject::draw() {
 	b2Vec2 pos = body->GetPosition();
-	shape.setPosition(sf::Vector2f(pos.x , pos.y));
+	shape.setPosition(sf::Vector2f(10 * pos.x , -10 * pos.y));
 	window.draw(shape);
+	//std::cout << "X: " << pos.x << " Y: " << pos.y << std::endl;
+}
+
+void BallObject::force(float x, float y) {
+	body->ApplyForce(b2Vec2(x, y), body->GetWorldCenter(), true);
 }

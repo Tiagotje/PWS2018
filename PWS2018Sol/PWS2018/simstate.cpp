@@ -1,6 +1,7 @@
 #include "simstate.hpp"
 
 #include <SFML/Graphics.hpp>
+#include <Box2D/Box2D.h>
 #include <iostream>
 
 #include "main.hpp"
@@ -85,6 +86,14 @@ void SimState::events()
 		//If C is pressed: Reset cam pos & zoom
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
 			mapView.reset(sf::FloatRect(-1000, 0, 2000, 1000));
+
+		//FORCES
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+			bal.force(-4000, 0);
+
+		//FORCES
+		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+			bal.force(4000, 0);
 
 		//Do zoom
 		if (ev.type == sf::Event::MouseWheelScrolled)

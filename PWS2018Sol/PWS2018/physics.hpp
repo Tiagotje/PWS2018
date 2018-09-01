@@ -16,5 +16,6 @@ class BallObject {
 	sf::CircleShape shape;
 public:
 	BallObject(float x, float y);
+	void force(float x, float y);
 	void draw();
 };

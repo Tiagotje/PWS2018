@@ -6,6 +6,9 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <random>
+#include <Box2D/Box2d.h>
+
+#include "physics.hpp"
 
 //De (helft van) de dikte van de lijn
 const int WIDTH = 5;
@@ -91,6 +94,16 @@ sf::VertexArray TerrainGen()
 	line.push_back(sf::Vector2f( 200, 700));
 	for (int i = 0; i < right.size(); i++)
 		line.push_back(right[i]);
-	//Zet punten om dikke lijn
+
+	//Define fixtures with shape (Box2D)
+	b2ChainShape chain;
+	std::vector<b2Vec2> b2points;
+	for (int i = 0; i < line.size(); i++) {
+		b2points.push_back(b2Vec2(line[i].x * 0.1, (line[i].y-WIDTH) * -0.1 ));
+	}
+	chain.CreateChain(b2points.data(), b2points.size());
+	Phys::groundBody->CreateFixture(&chain, 0.0f);
+
+	//Zet punten om dikke lijn (SFML)
 	return LineToVertexArray(line);
 }

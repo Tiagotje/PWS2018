@@ -15,6 +15,6 @@ public:
 private:
 	sf::View mapView, lowerView, upperView;
 	sf::VertexArray ground;
-	BallObject bal = BallObject(0, -100);
+	BallObject bal = BallObject(0, 0);
 	Button but;
 };

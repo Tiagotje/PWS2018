@@ -68,45 +68,40 @@ void SimState::draw()
 }
 
 
-void SimState::events()
+void SimState::events(sf::Event ev)
 {
-	//Luister naar input
-	sf::Event ev;
-	while (window.pollEvent(ev))
+	//Wanneer op kruisje geklikt wordt
+	if (ev.type == sf::Event::Closed)
+		window.close();
+
+	//Naar links of naar rechts bewegen met de view
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
+		mapView.setCenter(mapView.getCenter() - sf::Vector2f(100, 0));
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+		mapView.setCenter(mapView.getCenter() + sf::Vector2f(100, 0));
+	//If C is pressed: Reset cam pos & zoom
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
+		mapView.reset(sf::FloatRect(-1000, 0, 2000, 1000));
+
+	//FORCES
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
+		bal.force(-4000, 0);
+
+	//FORCES
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
+		bal.force(4000, 0);
+
+	//Do zoom
+	if (ev.type == sf::Event::MouseWheelScrolled)
+		mapView.zoom(1.0f + ev.mouseWheelScroll.delta * -0.1f);
+
+	//Als knop gedrukt: ga alle knoppen langs & check
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
-		//Wanneer op kruisje geklikt wordt
-		if (ev.type == sf::Event::Closed)
-			window.close();
-
-		//Naar links of naar rechts bewegen met de view
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
-			mapView.setCenter(mapView.getCenter() - sf::Vector2f(100, 0));
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
-			mapView.setCenter(mapView.getCenter() + sf::Vector2f(100, 0));
-		//If C is pressed: Reset cam pos & zoom
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
-			mapView.reset(sf::FloatRect(-1000, 0, 2000, 1000));
-
-		//FORCES
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-			bal.force(-4000, 0);
-
-		//FORCES
-		if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-			bal.force(4000, 0);
-
-		//Do zoom
-		if (ev.type == sf::Event::MouseWheelScrolled)
-			mapView.zoom(1.0f + ev.mouseWheelScroll.delta * -0.1f);
-
-		//Als knop gedrukt: ga alle knoppen langs & check
-		if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
-		{
-			sf::Vector2i pos = sf::Mouse::getPosition(window);
-			but.checkMouse(pos);
-			window.setView(mapView);
-			sf::Vector2f worldPos = window.mapPixelToCoords(pos);
-			std::cout << "X: " << worldPos.x << " Y: " << worldPos.y << std::endl;
-		}
+		sf::Vector2i pos = sf::Mouse::getPosition(window);
+		but.checkMouse(pos);
+		window.setView(mapView);
+		sf::Vector2f worldPos = window.mapPixelToCoords(pos);
+		std::cout << "X: " << worldPos.x << " Y: " << worldPos.y << std::endl;
 	}
 }

@@ -10,7 +10,7 @@ public:
 	SimState();
 	void calculate();
 	void draw();
-	void events();
+	void events(sf::Event);
 
 private:
 	sf::View mapView, lowerView, upperView;

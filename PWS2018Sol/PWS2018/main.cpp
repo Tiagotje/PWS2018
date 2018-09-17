@@ -9,7 +9,7 @@
 
 
 #include "state.hpp"
-#include "simstate.hpp"
+#include "menustate.hpp"
 #include "util.hpp"
 #include "physics.hpp"
 
@@ -26,20 +26,22 @@ int iter = 0;
 //EN Y-AXIS GESPIEGELD
 //Dus  Box2D (8, 50) = (80, -500) in SFML
 
+void events();
+
 int main()
 {
 	//Laad alle lettertypes aan het begin
 	Util::initFonts();
 	Phys::initPhysics();
 	window.create(sf::VideoMode(1600, 900), "SFML works!", sf::Style::Titlebar | sf::Style::Close);
-	state = new SimState();
+	state = new MenuState();
 
 	sf::Clock clock;
 	float lastTime = 0;
 
 	while (window.isOpen())
 	{
-		state->events();
+		events();
 		state->calculate();
 		Phys::updatePhysics(7000.0f);
 		state->draw();
@@ -49,8 +51,22 @@ int main()
 			float curr = clock.restart().asSeconds();
 			FPS = (100.0f / (curr));
 		}
+
 		iter++;
 	}
 
 	return 0;
+}
+
+void events()
+{
+	sf::Event ev;
+	while (window.pollEvent(ev))
+	{
+		if (ev.type == sf::Event::Closed)
+			window.close();
+		else {
+			state->events(ev);
+		}
+	}
 }

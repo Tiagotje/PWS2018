@@ -41,10 +41,10 @@ void Button::setTextPos(int x, int y)
 }
 
 //Doet func als muis erin zit. Wegens views moeten coords eerst worden omgerekent
-void Button::checkMouse(sf::Vector2i vec)
+void Button::checkMouse(sf::Vector2i v)
 {
-	window.mapPixelToCoords(vec, view);
-	if (rect.getGlobalBounds().contains((float)vec.x, (float)vec.y))
+	sf::Vector2f vec = window.mapPixelToCoords(v, view);
+	if (rect.getGlobalBounds().contains(vec.x, vec.y))
 		func();
 }
 

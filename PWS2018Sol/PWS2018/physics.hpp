@@ -10,6 +10,8 @@ namespace Phys {
 	void updatePhysics(float fps);
 	b2Body * genBall(float x, float y, float radius);
 	b2Body * genRod(float hw, float hy, b2Vec2 center, float angle);
+	void revolute(b2Body * A, b2Body * B, b2Vec2 pos);
+	extern b2RevoluteJoint* joint;
 }
 
 class BallObject {

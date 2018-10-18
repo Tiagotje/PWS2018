@@ -9,6 +9,7 @@
 b2Body * Phys::groundBody;
 b2Vec2 grav(0.0f, -10.0f);
 b2World Phys::world(grav);
+b2RevoluteJoint* Phys::joint;
 
 bool initPhys = false;
 
@@ -19,7 +20,6 @@ void Phys::initPhysics() {
 		return;
 	initPhys = true;
 
-	b2Vec2 grav(0.0f, -10.0f);
 	world.SetGravity(grav);
 
 	//Body in 4 steps
@@ -45,8 +45,6 @@ b2Body * Phys::genBall(float x, float y, float r) {
 	b2BodyDef bd;
 	bd.type = b2_dynamicBody;
 	bd.position.Set(x, y);
-	//tijdelijk
-	bd.fixedRotation = true;
 	ball = world.CreateBody(&bd);
 	b2CircleShape cs;
 	cs.m_p.Set(0, 0);
@@ -90,7 +88,7 @@ b2Body * Phys::genRod(float hx, float hy, b2Vec2 center, float angle) {
 	b2FixtureDef fd;
 	fd.shape = &poly;
 	fd.density = 1.0f;
-	fd.friction = 0.3f;
+	fd.friction = 0.05f;
 	fd.restitution = 0.1f;
 	rod->CreateFixture(&fd);
 	return rod;
@@ -112,12 +110,20 @@ void RodObject::draw()
 	shape.setRotation(sfmlAngle);
 
 	//rotate around point,  thanks Mehrdad Afshari (stackoverflow)
-	//xR = ((x - x_origin) * cos(angle)) - ((y_origin - y) * sin(angle)) + x_origin
-	//yR = ((y_origin - y) * cos(angle)) - ((x - x_origin) * sin(angle)) + y_origin
+	//xR = x cos A - y sin A
+	//yR = x sin A + y cos A
 
-	float xR = (-0.5 * dx * cos(angle)) - (-0.5 * dy * sin(angle)) + pos.x;
-	float yR = ( 0.5 * dy * cos(angle)) - ( 0.5 * dx * sin(angle)) + pos.y;
+	float xR = (-0.5 * dx * cos(angle)) - ( 0.5 * dy * sin(angle)) + pos.x;
+	float yR = (-0.5 * dx * sin(angle)) + ( 0.5 * dy * cos(angle)) + pos.y;
 	shape.setPosition(10 * xR, -10 * yR);
 
 	window.draw(shape);
+}
+
+void Phys::revolute(b2Body * A, b2Body * B, b2Vec2 pos)
+{
+	b2RevoluteJointDef jointDef;
+	jointDef.Initialize(A, B, pos);
+	Phys::joint = (b2RevoluteJoint*)Phys::world.CreateJoint(&jointDef);
+
 }

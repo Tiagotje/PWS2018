@@ -35,13 +35,7 @@ SimState::SimState()
 	but.setColor(sf::Color::Black);
 	but.setTextPos(10, 1);
 
-	//bal en rod
-	b2RevoluteJointDef jointDef;
-	jointDef.Initialize(bal.body, rod.body, rod.body->GetWorldCenter());
-	jointDef.maxMotorTorque = 100.0f;
-	jointDef.motorSpeed = 5.0f;
-	jointDef.enableMotor = false;
-	//b2RevoluteJoint* joint = (b2RevoluteJoint*)Phys::world.CreateJoint(&jointDef);
+	Phys::revolute(rod.body, rod2.body, b2Vec2(0, 0));
 
 }
 
@@ -63,6 +57,7 @@ void SimState::draw()
 	window.draw(ground);
 	bal.draw();
 	rod.draw();
+	rod2.draw();
 
 	//Tekent onderkant
 	window.setView(lowerView);
@@ -91,7 +86,7 @@ void SimState::events(sf::Event ev)
 		mapView.setCenter(mapView.getCenter() + sf::Vector2f(100, 0));
 	//If C is pressed: Reset cam pos & zoom
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
-		mapView.reset(sf::FloatRect(-1000, 0, 2000, 1000));
+		mapView.reset(sf::FloatRect(-1000, 200, 2000, 1000));
 
 	//FORCES
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
@@ -100,6 +95,17 @@ void SimState::events(sf::Event ev)
 	//FORCES
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
 		bal.force(4000, 0);
+
+	//FORCES
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
+		bal.force(0, 12000);
+
+	//FORCES
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)) {
+		Phys::joint->SetMotorSpeed(10.0);
+		Phys::joint->EnableMotor(true);
+		Phys::joint->SetMaxMotorTorque(100);
+	}
 
 	//Do zoom
 	if (ev.type == sf::Event::MouseWheelScrolled)

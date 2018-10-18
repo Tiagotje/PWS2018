@@ -165,6 +165,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="button.hpp" />
+    <ClInclude Include="creature.hpp" />
     <ClInclude Include="menustate.hpp" />
     <ClInclude Include="physics.hpp" />
     <ClInclude Include="util.hpp" />

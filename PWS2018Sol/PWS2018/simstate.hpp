@@ -16,5 +16,6 @@ private:
 	sf::View mapView, lowerView, upperView;
 	sf::VertexArray ground;
 	BallObject bal = BallObject(0, 0);
+	RodObject rod = RodObject(2, 0.5, b2Vec2(3, 0), 2);
 	Button but;
 };

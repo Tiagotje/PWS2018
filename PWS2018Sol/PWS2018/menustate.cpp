@@ -15,7 +15,6 @@ MenuState::MenuState()
 	title.setFont(Util::dafont);
 	title.setString("ONS SUPER STOERE PWS");
 	title.setCharacterSize(50);
-	std::cout << title.getLocalBounds().width << std::endl;
 	title.setPosition(sf::Vector2f((1600 - title.getLocalBounds().width) / 2, 100));
 	but.setView(window.getDefaultView());
 	but.setFont(Util::dafont);

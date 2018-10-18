@@ -26,6 +26,9 @@ int iter = 0;
 //EN Y-AXIS GESPIEGELD
 //Dus  Box2D (8, 50) = (80, -500) in SFML
 
+//Coords Box2D object = midden
+//Coords SFML object = linksboven
+
 void events();
 
 int main()
@@ -43,7 +46,8 @@ int main()
 	{
 		events();
 		state->calculate();
-		Phys::updatePhysics(7000.0f);
+		//norm = 5000
+		Phys::updatePhysics(5000.0f);
 		state->draw();
 		window.display();
 
@@ -70,3 +74,22 @@ void events()
 		}
 	}
 }
+
+
+//Voorbeeld abstract classes voor mr. raaf
+// Car * car
+// 
+// class Volkswagen : public Car { -- stuff -- }
+// class Skoda : public Car { -- stuff -- }
+
+// class Car{
+// public:
+//		virtual int kosten(int a, int b) = 0;
+// }
+
+// car = new Volkswagen();
+// car->kosten(a,b);
+// (*car).kosten(a,b);
+// delete car;
+// car = new Skoda();
+// car->kosten(a,b); 

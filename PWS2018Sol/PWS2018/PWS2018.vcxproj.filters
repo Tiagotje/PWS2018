@@ -1,66 +1,73 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="Source Files">
-      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
-      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
-    </Filter>
     <Filter Include="Header Files">
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    <Filter Include="GUI">
+      <UniqueIdentifier>{a80db317-1de6-4712-a1d5-d35c3795dbeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="States">
+      <UniqueIdentifier>{76650beb-d81d-4cc5-9b70-1b905079e8a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Simulation">
+      <UniqueIdentifier>{0a9c5444-6101-400e-81b8-89c4b8565b98}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="main">
+      <UniqueIdentifier>{ea7b2710-7619-4e35-b85d-bbc962836985}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="button.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="simstate.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="terrain.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="util.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="physics.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>GUI</Filter>
     </ClCompile>
     <ClCompile Include="menustate.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="simstate.cpp">
+      <Filter>States</Filter>
+    </ClCompile>
+    <ClCompile Include="terrain.cpp">
+      <Filter>Simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="physics.cpp">
+      <Filter>Simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="util.cpp">
+      <Filter>GUI</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>main</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="button.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="main.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="simstate.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>GUI</Filter>
     </ClInclude>
     <ClInclude Include="state.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>States</Filter>
     </ClInclude>
-    <ClInclude Include="terrain.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="util.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="physics.hpp">
-      <Filter>Header Files</Filter>
+    <ClInclude Include="simstate.hpp">
+      <Filter>States</Filter>
     </ClInclude>
     <ClInclude Include="menustate.hpp">
-      <Filter>Header Files</Filter>
+      <Filter>States</Filter>
+    </ClInclude>
+    <ClInclude Include="terrain.hpp">
+      <Filter>Simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="physics.hpp">
+      <Filter>Simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="util.hpp">
+      <Filter>GUI</Filter>
+    </ClInclude>
+    <ClInclude Include="main.hpp">
+      <Filter>main</Filter>
+    </ClInclude>
+    <ClInclude Include="creature.hpp">
+      <Filter>Simulation</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -34,6 +34,15 @@ SimState::SimState()
 	but.setFunc(dab);
 	but.setColor(sf::Color::Black);
 	but.setTextPos(10, 1);
+
+	//bal en rod
+	b2RevoluteJointDef jointDef;
+	jointDef.Initialize(bal.body, rod.body, rod.body->GetWorldCenter());
+	jointDef.maxMotorTorque = 100.0f;
+	jointDef.motorSpeed = 5.0f;
+	jointDef.enableMotor = false;
+	//b2RevoluteJoint* joint = (b2RevoluteJoint*)Phys::world.CreateJoint(&jointDef);
+
 }
 
 //Nu nog leeg...
@@ -53,16 +62,17 @@ void SimState::draw()
 	window.setView(mapView);
 	window.draw(ground);
 	bal.draw();
+	rod.draw();
 
 	//Tekent onderkant
-	sf::RectangleShape rect(sf::Vector2f(1600, 90));
-	rect.setFillColor(sf::Color::Red);
 	window.setView(lowerView);
+	sf::RectangleShape rect(sf::Vector2f(1600, 90));
+	rect.setFillColor(sf::Color(80, 80, 80));
 	window.draw(rect);
 
 	//Tekent bovenkant
-	rect.setSize(sf::Vector2f(1600, 45));
 	window.setView(upperView);
+	rect.setSize(sf::Vector2f(1600, 45));
 	window.draw(rect);
 	but.draw();
 }

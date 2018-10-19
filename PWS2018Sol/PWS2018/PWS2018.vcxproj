@@ -156,6 +156,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="button.cpp" />
+    <ClCompile Include="creature.cpp" />
     <ClCompile Include="menustate.cpp" />
     <ClCompile Include="physics.cpp" />
     <ClCompile Include="util.cpp" />

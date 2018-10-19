@@ -22,13 +22,3 @@ public:
 	void force(float x, float y);
 	void draw();
 };
-
-class RodObject {
-public:
-	b2Body * body;
-	sf::RectangleShape shape;
-	float dx;
-	float dy;
-	RodObject(float hx, float hy, b2Vec2 center, float angle);
-	void draw();
-};

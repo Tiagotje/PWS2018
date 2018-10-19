@@ -3,6 +3,7 @@
 #include "state.hpp"
 #include "button.hpp"
 #include "physics.hpp"
+#include "creature.hpp"
 #include <SFML/Graphics.hpp>
 
 class SimState : public State {
@@ -16,7 +17,6 @@ private:
 	sf::View mapView, lowerView, upperView;
 	sf::VertexArray ground;
 	BallObject bal = BallObject(20, 0);
-	RodObject rod = RodObject(4, 0.5, b2Vec2(-2, 0), 0);
-	RodObject rod2 = RodObject(4, 0.5, b2Vec2(2, 0), 0);
+	Limb limb = Limb(b2Vec2(0, 0), b2Vec2(10,-20));
 	Button but;
 };

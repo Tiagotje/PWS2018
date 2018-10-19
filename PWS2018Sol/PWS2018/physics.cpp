@@ -76,50 +76,6 @@ void BallObject::force(float x, float y) {
 	body->ApplyForce(b2Vec2(x, y), body->GetWorldCenter(), true);
 }
 
-b2Body * Phys::genRod(float hx, float hy, b2Vec2 center, float angle) {
-	b2Body * rod;
-	b2BodyDef bd;
-	bd.type = b2_dynamicBody;
-	bd.position.Set(center.x, center.y);
-	bd.angle = angle;
-	rod = world.CreateBody(&bd);
-	b2PolygonShape poly;
-	poly.SetAsBox(hx, hy);
-	b2FixtureDef fd;
-	fd.shape = &poly;
-	fd.density = 1.0f;
-	fd.friction = 0.05f;
-	fd.restitution = 0.1f;
-	rod->CreateFixture(&fd);
-	return rod;
-}
-
-RodObject::RodObject(float _dx, float _dy, b2Vec2 center, float angle)
-{
-	dx = _dx;  dy = _dy;
-	body = Phys::genRod(0.5*dx , 0.5*dy, center, angle);
-	shape = sf::RectangleShape(sf::Vector2f(10 * dx, 10 * dy));
-	shape.setFillColor(sf::Color(10, 30, 210));
-}
-
-void RodObject::draw() 
-{
-	b2Vec2 pos = body->GetPosition();
-	float angle = body->GetAngle();
-	float sfmlAngle = -angle * radToDeg; //omfg
-	shape.setRotation(sfmlAngle);
-
-	//rotate around point,  thanks Mehrdad Afshari (stackoverflow)
-	//xR = x cos A - y sin A
-	//yR = x sin A + y cos A
-
-	float xR = (-0.5 * dx * cos(angle)) - ( 0.5 * dy * sin(angle)) + pos.x;
-	float yR = (-0.5 * dx * sin(angle)) + ( 0.5 * dy * cos(angle)) + pos.y;
-	shape.setPosition(10 * xR, -10 * yR);
-
-	window.draw(shape);
-}
-
 void Phys::revolute(b2Body * A, b2Body * B, b2Vec2 pos)
 {
 	b2RevoluteJointDef jointDef;

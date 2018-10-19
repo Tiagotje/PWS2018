@@ -35,8 +35,8 @@ SimState::SimState()
 	but.setColor(sf::Color::Black);
 	but.setTextPos(10, 1);
 
-	Phys::revolute(rod.body, rod2.body, b2Vec2(0, 0));
-
+	//Phys::revolute(rod.body, rod2.body, b2Vec2(0, 0));
+	limb.spawn();
 }
 
 //Nu nog leeg...
@@ -56,8 +56,7 @@ void SimState::draw()
 	window.setView(mapView);
 	window.draw(ground);
 	bal.draw();
-	rod.draw();
-	rod2.draw();
+	limb.draw();
 
 	//Tekent onderkant
 	window.setView(lowerView);

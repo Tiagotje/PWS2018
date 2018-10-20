@@ -103,6 +103,10 @@ sf::VertexArray TerrainGen()
 	}
 	chain.CreateChain(b2points.data(), b2points.size());
 	Phys::groundBody->CreateFixture(&chain, 0.0f);
+	b2Filter groundFilter = b2Filter();
+	groundFilter.categoryBits = 3;
+	groundFilter.maskBits = 3;
+	Phys::groundBody->GetFixtureList()->SetFilterData(groundFilter);
 
 	//Zet punten om dikke lijn (SFML)
 	return LineToVertexArray(line);

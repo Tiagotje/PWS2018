@@ -40,6 +40,9 @@
     <ClCompile Include="main.cpp">
       <Filter>main</Filter>
     </ClCompile>
+    <ClCompile Include="bodyparts.cpp">
+      <Filter>Simulation</Filter>
+    </ClCompile>
     <ClCompile Include="creature.cpp">
       <Filter>Simulation</Filter>
     </ClCompile>
@@ -70,6 +73,9 @@
       <Filter>main</Filter>
     </ClInclude>
     <ClInclude Include="creature.hpp">
+      <Filter>Simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="bodyparts.hpp">
       <Filter>Simulation</Filter>
     </ClInclude>
   </ItemGroup>

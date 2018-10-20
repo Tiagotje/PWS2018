@@ -35,8 +35,11 @@ SimState::SimState()
 	but.setColor(sf::Color::Black);
 	but.setTextPos(10, 1);
 
-	//Phys::revolute(rod.body, rod2.body, b2Vec2(0, 0));
 	limb.spawn();
+	limb2.spawn();
+	head.spawn();
+	Phys::revolute(limb.body, limb2.body, b2Vec2(0,0));
+	Phys::revolute(head.body, limb2.body, b2Vec2(4.5, 0));
 }
 
 //Nu nog leeg...
@@ -55,8 +58,6 @@ void SimState::draw()
 	//tekent map
 	window.setView(mapView);
 	window.draw(ground);
-	bal.draw();
-	limb.draw();
 
 	//Tekent onderkant
 	window.setView(lowerView);
@@ -86,25 +87,6 @@ void SimState::events(sf::Event ev)
 	//If C is pressed: Reset cam pos & zoom
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
 		mapView.reset(sf::FloatRect(-1000, 200, 2000, 1000));
-
-	//FORCES
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::A))
-		bal.force(-4000, 0);
-
-	//FORCES
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::D))
-		bal.force(4000, 0);
-
-	//FORCES
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
-		bal.force(0, 12000);
-
-	//FORCES
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::I)) {
-		Phys::joint->SetMotorSpeed(10.0);
-		Phys::joint->EnableMotor(true);
-		Phys::joint->SetMaxMotorTorque(100);
-	}
 
 	//Do zoom
 	if (ev.type == sf::Event::MouseWheelScrolled)

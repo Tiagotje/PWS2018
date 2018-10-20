@@ -48,8 +48,10 @@ int main()
 		state->calculate();
 		//norm = 5000
 		Phys::updatePhysics(5000.0f);
-		state->draw();
-		window.display();
+		if (iter % 2 == 0) {
+			state->draw();
+			window.display();
+		}
 
 		if ((iter % 100) == 0) {
 			float curr = clock.restart().asSeconds();

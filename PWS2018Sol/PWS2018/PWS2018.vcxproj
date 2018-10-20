@@ -156,6 +156,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="button.cpp" />
+    <ClCompile Include="bodyparts.cpp" />
     <ClCompile Include="creature.cpp" />
     <ClCompile Include="menustate.cpp" />
     <ClCompile Include="physics.cpp" />
@@ -165,6 +166,7 @@
     <ClCompile Include="terrain.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="bodyparts.hpp" />
     <ClInclude Include="button.hpp" />
     <ClInclude Include="creature.hpp" />
     <ClInclude Include="menustate.hpp" />

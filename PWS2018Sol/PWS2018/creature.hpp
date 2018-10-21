@@ -7,13 +7,14 @@
 
 class Node {
 public:
-	Node(b2Vec2 b, float l, float a, b2Body * parent);
+	Node(b2Vec2 b, float l, float a);
 	Limb limb;
 	b2RevoluteJoint * joint;
 	std::vector<Node> nodes;
-	b2Body * parent;
-	void spawn();
+	float angle;
+	void spawn(b2Body * parent);
 	void draw();
+	void addNode(float l, float a);
 	void setSpeed(float v);
 	//void despawn();
 };
@@ -23,10 +24,10 @@ public:
 //Head + Limb tree (+ NN)
 class Creature {
 	Head head = Head(b2Vec2(0, 0));
-	std::vector<Node> nodes;
 	std::vector<Limb*> limbs;
 public:
 	Creature() {}
+	std::vector<Node> nodes;
 	void spawn();
 	void draw();
 	//void despawn();

@@ -1,6 +1,7 @@
 #include "bodyparts.hpp"
 
 #include <math.h>
+#include <iostream>
 
 #include <Box2D/Box2D.h>
 #include <SFML/Graphics.hpp>
@@ -26,8 +27,10 @@ Limb::Limb(b2Vec2 b, float l, float a)
 
 Limb::~Limb()
 {
-	if(body != NULL)
+	if (body != NULL) {
+		std::cout << "NOOO LIMB DESTROYED" << std::endl;
 		body->GetWorld()->DestroyBody(body);
+	}
 }
 
 void Limb::spawn()
@@ -101,6 +104,7 @@ void Head::spawn()
 	b2BodyDef bd;
 	bd.type = b2_dynamicBody;
 	bd.position.Set(pos.x, pos.y);
+	bd.fixedRotation = true;
 	body = Phys::world.CreateBody(&bd);
 	b2CircleShape cs;
 	cs.m_p.Set(0, 0);

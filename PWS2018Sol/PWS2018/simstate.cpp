@@ -35,9 +35,13 @@ SimState::SimState()
 	but.setColor(sf::Color::Black);
 	but.setTextPos(10, 1);
 
-	c.addNode(5, 1);
-	//c.addNode(3, 13.45);
+	c.addNode(5, 0);
+	c.addNode(5, 2);
+	c.addNode(5, 4);
 	c.spawn();
+	c.nodes[0].setSpeed(3);
+	c.nodes[1].setSpeed(3.5);
+	c.nodes[2].setSpeed(4);
 }
 
 //Nu nog leeg...

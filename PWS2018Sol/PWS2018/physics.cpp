@@ -26,8 +26,8 @@ void Phys::initPhysics() {
 }
 
 void Phys::updatePhysics(float fps) {
-	int32 velocityIterations = 10; //6
-	int32 positionIterations = 4;  //2
+	int32 velocityIterations = 20; //6
+	int32 positionIterations = 8;  //2
 	world.Step(1.0f / fps, velocityIterations, positionIterations);
 	if (iter % (7000) == 0)
 		std::cout << iter << " FPS: " << FPS << std::endl;

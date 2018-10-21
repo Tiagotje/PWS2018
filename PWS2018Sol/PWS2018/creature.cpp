@@ -6,54 +6,56 @@
 void Creature::spawn()
 {
 	head.spawn();
-	for (Node n : nodes) {
-		n.parent = head.body;
-		n.spawn();
+	for (int i = 0; i < nodes.size(); i++) {
+		nodes[i].spawn(head.body);
 	}
 }
 
 
 void Creature::draw()
 {
-	for (Node n : nodes)
-		n.draw();
+	for (int i = 0; i<nodes.size(); i++)
+		nodes[i].draw();
 	head.draw();
 }
 
 void Creature::addNode(float l, float a)
 {
-	//beginpunt op rand van cirkel
-	b2Vec2 b = b2Vec2(sin(a) * head.r, cos(a) * head.r);
-	nodes.push_back(Node(b, l, a, head.body));
+	nodes.push_back(Node(b2Vec2(0,0), l, a));
 }
 
-Node::Node(b2Vec2 b, float l, float a, b2Body * bod)
+void Node::addNode(float l, float a)
+{
+	nodes.push_back(Node(limb.getEnd(), l, angle+a));
+}
+
+Node::Node(b2Vec2 b, float l, float a)
 {
 	limb = Limb(b, l, a);
-	parent = bod;
+	angle = a;
 }
 
-void Node::spawn()
+void Node::spawn(b2Body * bod)
 {
 	limb.spawn();
 	b2RevoluteJointDef jointDef;
-	jointDef.Initialize(parent, limb.body, limb.getBegin());
+	jointDef.Initialize(bod, limb.body, limb.getBegin());
 	joint = (b2RevoluteJoint *)Phys::world.CreateJoint(&jointDef);
 
-	//for (Node n : nodes)
-		//n.spawn();
+	for (int i = 0; i < nodes.size(); i++)
+		nodes[i].spawn(limb.body);
 }
 
 void Node::draw()
 {
 	limb.draw();
-	for (Node n : nodes)
-		n.draw();
+	for (int i = 0; i<nodes.size(); i++)
+		nodes[i].draw();
 }
 
 void Node::setSpeed(float v)
 {
 	joint->SetMotorSpeed(v);
 	joint->EnableMotor(true);
-	joint->SetMaxMotorTorque(100);
+	joint->SetMaxMotorTorque(1000);
 }

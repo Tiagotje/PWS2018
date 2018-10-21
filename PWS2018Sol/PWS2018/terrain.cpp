@@ -48,7 +48,7 @@ std::vector<sf::Vector2f> Gen(int startX, int maxX, int sAmp, int minH, int maxH
 	do{
 		prevX = x;
 		prevY = y;
-		y = prevY + (sAmp) * (randd()-0.5f)  * (1.0 + min(abs(prevX / 300), 250.0) );
+		y = prevY + (sAmp) * (randd()-0.5f)  * (1.0 + prevX / 500);
 		if (y < minH)
 			y += (minH - y) * 2;
 		if (y > maxH)

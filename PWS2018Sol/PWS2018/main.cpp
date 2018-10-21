@@ -47,8 +47,8 @@ int main()
 		events();
 		state->calculate();
 		//norm = 5000
-		Phys::updatePhysics(5000.0f);
-		if (iter % 2 == 0) {
+		Phys::updatePhysics(100.0f);
+		if (iter % 1 == 0) {
 			state->draw();
 			window.display();
 		}

@@ -35,11 +35,9 @@ SimState::SimState()
 	but.setColor(sf::Color::Black);
 	but.setTextPos(10, 1);
 
-	limb.spawn();
-	limb2.spawn();
-	head.spawn();
-	Phys::revolute(limb.body, limb2.body, b2Vec2(0,0));
-	Phys::revolute(head.body, limb2.body, b2Vec2(4.5, 0));
+	c.addNode(5, 1);
+	//c.addNode(3, 13.45);
+	c.spawn();
 }
 
 //Nu nog leeg...
@@ -58,6 +56,8 @@ void SimState::draw()
 	//tekent map
 	window.setView(mapView);
 	window.draw(ground);
+
+	c.draw();
 
 	//Tekent onderkant
 	window.setView(lowerView);

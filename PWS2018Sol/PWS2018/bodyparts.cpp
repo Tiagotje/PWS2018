@@ -26,7 +26,8 @@ Limb::Limb(b2Vec2 b, float l, float a)
 
 Limb::~Limb()
 {
-	body->GetWorld()->DestroyBody(body);
+	if(body != NULL)
+		body->GetWorld()->DestroyBody(body);
 }
 
 void Limb::spawn()
@@ -73,6 +74,11 @@ void Limb::draw()
 b2Vec2 Limb::getEnd()
 {
 	return sEnd;
+}
+
+b2Vec2 Limb::getBegin()
+{
+	return sBegin;
 }
 
 Head::Head(b2Vec2 p) {

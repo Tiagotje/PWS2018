@@ -3,7 +3,7 @@
 #include "state.hpp"
 #include "button.hpp"
 #include "physics.hpp"
-#include "bodyparts.hpp"
+#include "creature.hpp"
 #include <SFML/Graphics.hpp>
 
 class SimState : public State {
@@ -16,4 +16,5 @@ private:
 	sf::View mapView, lowerView, upperView;
 	sf::VertexArray ground;
 	Button but;
+	Creature c;
 };

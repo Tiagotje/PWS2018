@@ -9,9 +9,11 @@
 //Huidige hy staat op 0.2 (dus 0.4 dik)
 class Limb {
 public:
+	Limb() {}
 	Limb(b2Vec2 b, float l, float a);
 	~Limb();
-	b2Body * body;
+	b2Body * body = NULL;
+	b2Vec2 getBegin();
 	b2Vec2 getEnd();
 	void spawn();
 	void draw();
@@ -36,7 +38,7 @@ public:
 	b2Vec2 pos;
 	void spawn();
 	void draw();
-private:
 	float r = 0.5;
+private:
 	sf::CircleShape shape;
 };

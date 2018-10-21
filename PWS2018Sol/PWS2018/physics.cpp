@@ -19,8 +19,6 @@ void Phys::initPhysics() {
 		return;
 	initPhys = true;
 
-	world.SetGravity(grav);
-
 	b2BodyDef groundBodyDef;
 	groundBodyDef.position.Set(0.0f, 0.0f);
 	groundBody = world.CreateBody(&groundBodyDef);

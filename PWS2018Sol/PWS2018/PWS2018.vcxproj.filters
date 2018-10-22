@@ -46,6 +46,9 @@
     <ClCompile Include="creature.cpp">
       <Filter>Simulation</Filter>
     </ClCompile>
+    <ClCompile Include="NN.cpp">
+      <Filter>Simulation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="button.hpp">
@@ -76,6 +79,9 @@
       <Filter>Simulation</Filter>
     </ClInclude>
     <ClInclude Include="bodyparts.hpp">
+      <Filter>Simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="NN.hpp">
       <Filter>Simulation</Filter>
     </ClInclude>
   </ItemGroup>

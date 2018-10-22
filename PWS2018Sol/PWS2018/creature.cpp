@@ -21,18 +21,19 @@ void Creature::draw()
 
 void Creature::addNode(float l, float a)
 {
-	nodes.push_back(Node(b2Vec2(0,0), l, a));
+	nodes.push_back(Node(b2Vec2(0,0), l, a, this));
 }
 
 void Node::addNode(float l, float a)
 {
-	nodes.push_back(Node(limb.getEnd(), l, angle+a));
+	nodes.push_back(Node(limb.getEnd(), l, angle+a, creature));
 }
 
-Node::Node(b2Vec2 b, float l, float a)
+Node::Node(b2Vec2 b, float l, float a, Creature * c)
 {
 	limb = Limb(b, l, a);
 	angle = a;
+	creature = c;
 }
 
 void Node::spawn(b2Body * bod)
@@ -44,6 +45,7 @@ void Node::spawn(b2Body * bod)
 
 	for (int i = 0; i < nodes.size(); i++)
 		nodes[i].spawn(limb.body);
+	creature->limbs.push_back(&limb);
 }
 
 void Node::draw()

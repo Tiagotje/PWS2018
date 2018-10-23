@@ -66,6 +66,7 @@ void Node::spawn(b2Body * bod)
 	jointDef.Initialize(bod, limb.body, limb.getBegin());
 	jointDef.lowerAngle = -0.5 * b2_pi;
 	jointDef.upperAngle = 0.5 * b2_pi;
+	jointDef.enableLimit = true;
 	joint = (b2RevoluteJoint *)Phys::world.CreateJoint(&jointDef);
 	creature->joints.push_back(joint);
 

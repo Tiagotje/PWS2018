@@ -12,7 +12,7 @@
 #include "creature.hpp"
 
 #define INPUTSIZE 12
-#define HIDDENSIZE 20
+#define HIDDENSIZE 10
 #define OUTPUTSIZE 5
 
 class Creature;

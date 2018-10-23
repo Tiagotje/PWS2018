@@ -2,22 +2,28 @@
 
 #include "main.hpp"
 #include "bodyparts.hpp"
+#include "NN.hpp"
 #include <vector>
 #include <Box2D/Box2D.h>
 
 class Node;
+class NN;
 
 //Creature = Head + Limb tree (+ NN)
 class Creature {
 public:
 	Head head = Head(b2Vec2(0, 0));
 	std::vector<Limb*> limbs;
-	Creature() {}
+	std::vector<b2RevoluteJoint*> joints;
+	Creature();
+	~Creature();
 	std::vector<Node> nodes;
 	void spawn();
 	void draw();
+	void calculate();
 	//void despawn();
 	void addNode(float l, float a);
+	NN * nn;
 };
 
 

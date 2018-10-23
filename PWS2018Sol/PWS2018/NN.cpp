@@ -1,20 +1,29 @@
 #include "NN.hpp"
+#include "creature.hpp"
 #include <math.h>
+#include <iostream>
+#include <random>
 
-void NN::calculate()
+NN::NN(Creature * c)
+{
+	creature = c;
+}
+
+
+void NN::calculate(float a, float b, float c, float d, float e, float f, float g)
 {
 	//eten  richting & afstand
-	input[0] = 0.0; 
-	input[1] = fmin(1, 0.0 / 50);
+	input[0] = a;
+	input[1] = fmin(1, b / 50);
 	
 	//benen
-	input[2] = 0.0;
-	input[3] = 0.0;
-	input[4] = 0.0;
-	input[5] = 0.0;
+	input[2] = c;
+	input[3] = d;
+	input[4] = e;
+	input[5] = f;
 
 	//honger
-	input[6] = 0.0;
+	input[6] = g;
 
 	//proprioceptie
 	for (int i = 0; i < OUTPUTSIZE; i++)
@@ -42,6 +51,13 @@ void NN::calculate()
 	for (int i = 0; i < OUTPUTSIZE; i++)
 		output[i] = sigmoid(output[i]);
 
+}
+
+void NN::initweights() {
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<> dis(-1.0, 1.0);
+	std::cout << dis(gen) << std::endl;
 }
 
 //ipv sigmoid doen we tanh, is sneller  (1/1+abs(x) kan ook?)

@@ -38,14 +38,16 @@ SimState::SimState()
 	c.addNode(5, 0);
 	c.addNode(5, 2);
 	c.addNode(5, 4);
+	c.nodes[2].addNode(3, 1);
+	c.nodes[0].addNode(5, 0);
 	c.spawn();
-	c.nodes[0].setSpeed(3);
-	c.nodes[1].setSpeed(3.5);
-	c.nodes[2].setSpeed(4);
 }
 
-//Nu nog leeg...
-void SimState::calculate() {  }
+//Nu nog leeg...h
+void SimState::calculate() 
+{  
+	c.calculate();
+}
 
 void dab()
 {

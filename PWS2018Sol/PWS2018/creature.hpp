@@ -21,7 +21,7 @@ public:
 	void spawn();
 	void draw();
 	void calculate();
-	//void despawn();
+	void despawn();
 	void addNode(float l, float a);
 	NN * nn;
 };
@@ -39,7 +39,7 @@ public:
 	void draw();
 	void addNode(float l, float a);
 	void setSpeed(float v);
-	//void despawn();
+	void despawn();
 };
 
 

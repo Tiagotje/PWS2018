@@ -1,5 +1,6 @@
 #include "creature.hpp"
 #include "physics.hpp"
+#include "NN.hpp"
 
 #include <Box2D/Box2d.h>
 
@@ -19,6 +20,13 @@ void Creature::spawn()
 	head.spawn();
 	for (int i = 0; i < nodes.size(); i++) {
 		nodes[i].spawn(head.body);
+	}
+}
+
+void Creature::despawn()
+{
+	for (int i = 0; i < nodes.size(); i++) {
+		nodes[i].despawn();
 	}
 }
 
@@ -74,6 +82,14 @@ void Node::spawn(b2Body * bod)
 		nodes[i].spawn(limb.body);
 	creature->limbs.push_back(&limb);
 }
+
+void Node::despawn()
+{
+	limb.~Limb();
+	for (int i = 0; i < nodes.size(); i++)
+		nodes[i].despawn();
+}
+
 
 void Node::draw()
 {

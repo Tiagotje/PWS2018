@@ -8,11 +8,11 @@
 #include "terrain.hpp"
 #include "util.hpp"
 #include "button.hpp"
+#include "creature.hpp"
 
 void dab();
 
-SimState::SimState()
-{
+SimState::SimState(){
 	Util::initFonts();
 	//reset geeft aan welk deel van de view op het scherm moet komen
 	//Viewport geeft in fracties aan waar op het scherm deze getekend moet worden
@@ -35,18 +35,33 @@ SimState::SimState()
 	but.setColor(sf::Color::Black);
 	but.setTextPos(10, 1);
 
-	c.addNode(5, 0);
-	c.addNode(5, 2);
-	c.addNode(5, 4);
-	c.nodes[2].addNode(3, 1);
-	c.nodes[0].addNode(5, 0);
-	c.spawn();
+	pop.push_back(new Creature());
+	pop[0]->addNode(5, 0);
+	pop[0]->addNode(5, 2);
+	pop[0]->addNode(5, 4);
+	pop[0]->nodes[2].addNode(3, 1);
+	pop[0]->nodes[0].addNode(5, 0);
+
+	pop.push_back(new Creature());
+	pop[1]->addNode(3, 1);
+	pop[1]->addNode(1, 2.5);
+	pop[1]->addNode(5, 3);
+	pop[1]->nodes[2].addNode(1, 1);
+	pop[1]->nodes[0].addNode(10, 0);
+
+	active = pop[0];
+	active->spawn();
 }
 
 //Nu nog leeg...h
 void SimState::calculate() 
 {  
-	c.calculate();
+	if (iter == 35000) {
+		active->despawn();
+		active = pop[1];
+		active->spawn();
+	}
+	active->calculate();
 }
 
 void dab()
@@ -63,7 +78,7 @@ void SimState::draw()
 	window.setView(mapView);
 	window.draw(ground);
 
-	c.draw();
+	active->draw();
 
 	//Tekent onderkant
 	window.setView(lowerView);

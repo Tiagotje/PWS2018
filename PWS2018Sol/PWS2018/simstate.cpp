@@ -9,6 +9,7 @@
 #include "util.hpp"
 #include "button.hpp"
 #include "creature.hpp"
+#include "food.hpp"
 
 void dab();
 
@@ -51,12 +52,17 @@ SimState::SimState(){
 
 	active = pop[0];
 	active->spawn();
+
+	food.push_back(Food(b2Vec2(5, -18)));
+	food.push_back(Food(b2Vec2(5, -38)));
 }
 
 //Nu nog leeg...h
 void SimState::calculate() 
 {  
 	active->calculate();
+	for (int i = 0; i < food.size(); i++)
+		food[i].check();
 }
 
 void dab()
@@ -74,6 +80,8 @@ void SimState::draw()
 	window.draw(ground);
 
 	active->draw();
+	for (int i = 0; i < food.size(); i++)
+		food[i].draw();
 
 	//Tekent onderkant
 	window.setView(lowerView);

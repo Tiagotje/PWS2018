@@ -78,20 +78,32 @@ sf::VertexArray LineToVertexArray(std::vector<sf::Vector2f> line)
 	return lines;
 }
 
+void FoodposGen(std::vector<b2Vec2> data)
+{
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<> dis(-50000, 50000);
+
+	for (int i = 0; i < 250; i++)
+	{
+
+	}
+}
+
 //Punten tussen -5.000 en +5.000
 sf::VertexArray TerrainGen()
 {
 	//Start de Random Number Generator op
 	std::srand(time(NULL));
 	//Genereert linker & rechter deel, -200 tot 200 = beginplatform
-	std::vector<sf::Vector2f> left  = Gen( -200, -50000, 10, 450, 950, true );
-	std::vector<sf::Vector2f> right = Gen(  200,  50000, 10, 450, 950, false);
+	std::vector<sf::Vector2f> left  = Gen( -200, -50000, 10, 150, 650, true );
+	std::vector<sf::Vector2f> right = Gen(  200,  50000, 10, 150, 650, false);
 	//Zet de punten in de juiste volgorde van links -> rechts
 	std::vector<sf::Vector2f> line;
 	for (int i = left.size() - 1; i > -1; i -= 1)
 		line.push_back(left[i]);
-	line.push_back(sf::Vector2f(-200, 700));
-	line.push_back(sf::Vector2f( 200, 700));
+	line.push_back(sf::Vector2f(-200, 400));
+	line.push_back(sf::Vector2f( 200, 400));
 	for (int i = 0; i < right.size(); i++)
 		line.push_back(right[i]);
 

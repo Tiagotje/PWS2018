@@ -8,3 +8,5 @@ extern sf::RenderWindow window;
 extern float FPS;
 extern int iter;
 extern State * state;
+extern const float timestep;
+extern b2Vec2 foodpos[250];

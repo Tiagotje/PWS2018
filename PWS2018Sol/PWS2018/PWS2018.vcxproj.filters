@@ -49,6 +49,9 @@
     <ClCompile Include="NN.cpp">
       <Filter>Simulation</Filter>
     </ClCompile>
+    <ClCompile Include="food.cpp">
+      <Filter>Simulation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="button.hpp">
@@ -82,6 +85,9 @@
       <Filter>Simulation</Filter>
     </ClInclude>
     <ClInclude Include="NN.hpp">
+      <Filter>Simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="food.hpp">
       <Filter>Simulation</Filter>
     </ClInclude>
   </ItemGroup>

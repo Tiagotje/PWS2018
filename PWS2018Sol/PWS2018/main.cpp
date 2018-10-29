@@ -19,6 +19,7 @@ sf::RenderWindow window;
 State * state;
 float FPS = 1000;
 int iter = 0;
+const float timestep = 15000;
 
 //VERGEET NIET!!
 //SCHAAL VERSCHIL, WEGENS WISKUNDE SHIT
@@ -47,7 +48,7 @@ int main()
 		events();
 		state->calculate();
 		//norm = 5000
-		Phys::updatePhysics(500.0f);
+		Phys::updatePhysics(timestep);
 		if (iter % 1 == 0) {
 			state->draw();
 			window.display();

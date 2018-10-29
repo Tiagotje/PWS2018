@@ -53,8 +53,8 @@ SimState::SimState(){
 	active = pop[0];
 	active->spawn();
 
-	food.push_back(Food(b2Vec2(5, -18)));
-	food.push_back(Food(b2Vec2(5, -38)));
+	for (int i = 0; i < foodsize; i++)
+		food.push_back(Food(foodpos[i]));
 }
 
 //Nu nog leeg...h

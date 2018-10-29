@@ -9,6 +9,7 @@
 #include <Box2D/Box2d.h>
 
 #include "physics.hpp"
+#include "main.hpp"
 
 //De (helft van) de dikte van de lijn
 const int WIDTH = 5;
@@ -84,9 +85,23 @@ void FoodposGen(std::vector<b2Vec2> data)
 	std::mt19937 gen(rd());
 	std::uniform_real_distribution<> dis(-50000, 50000);
 
-	for (int i = 0; i < 250; i++)
+	for (int i = 0; i < foodsize; i++)
 	{
-
+		float xPos = dis(gen);
+		//zoek bijpassende y pos door te intrapoleren
+		b2Vec2 p1;
+		b2Vec2 p2;
+		for (int j = 0; j < data.size(); j++)
+			if (data[j].x > xPos) {
+				p1 = data[j - 1];
+				p2 = data[j ];
+				break;
+			}
+		//factor = 0.0 tm 1.0 hoever bij punt 1 of punt 2
+		float factor = (xPos - p1.x) / (p2.x - p1.x);
+		//vind passende tussenpositie
+		float yPos = p1.y * (1 - factor) + p2.y * factor + 2;
+		foodpos[i] = b2Vec2(xPos, yPos);
 	}
 }
 
@@ -107,12 +122,17 @@ sf::VertexArray TerrainGen()
 	for (int i = 0; i < right.size(); i++)
 		line.push_back(right[i]);
 
+
 	//Define fixtures with shape (Box2D)
 	b2ChainShape chain;
 	std::vector<b2Vec2> b2points;
+	//b2points = vector links -> rechts
 	for (int i = 0; i < line.size(); i++) {
 		b2points.push_back(b2Vec2(line[i].x * 0.1, (line[i].y-WIDTH) * -0.1 ));
 	}
+	//Genereer foodpos met data
+	FoodposGen(b2points);
+	//genereer chain met data
 	chain.CreateChain(b2points.data(), b2points.size());
 	Phys::groundBody->CreateFixture(&chain, 0.0f);
 	b2Filter groundFilter = b2Filter();

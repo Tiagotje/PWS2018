@@ -19,7 +19,9 @@ sf::RenderWindow window;
 State * state;
 float FPS = 1000;
 int iter = 0;
-const float timestep = 15000;
+const float timestep = 60;
+const int foodsize = 1000;
+b2Vec2 foodpos[1000];
 
 //VERGEET NIET!!
 //SCHAAL VERSCHIL, WEGENS WISKUNDE SHIT
@@ -41,24 +43,20 @@ int main()
 	state = new MenuState();
 
 	sf::Clock clock;
-	float lastTime = 0;
+	float frame = 0;
 
 	while (window.isOpen())
 	{
 		events();
 		state->calculate();
-		//norm = 5000
 		Phys::updatePhysics(timestep);
-		if (iter % 1 == 0) {
+
+		if (clock.getElapsedTime().asMilliseconds() > 10 * frame)
+		{
 			state->draw();
 			window.display();
+			frame++;
 		}
-
-		if ((iter % 100) == 0) {
-			float curr = clock.restart().asSeconds();
-			FPS = (100.0f / (curr));
-		}
-
 		iter++;
 	}
 

@@ -56,11 +56,6 @@ SimState::SimState(){
 //Nu nog leeg...h
 void SimState::calculate() 
 {  
-	if (iter == 35000) {
-		active->despawn();
-		active = pop[1];
-		active->spawn();
-	}
 	active->calculate();
 }
 

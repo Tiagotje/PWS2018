@@ -11,6 +11,7 @@
 #include "state.hpp"
 #include "menustate.hpp"
 #include "util.hpp"
+#include "food.hpp"
 #include "physics.hpp"
 
 
@@ -22,6 +23,7 @@ int iter = 0;
 const float timestep = 60;
 const int foodsize = 1000;
 b2Vec2 foodpos[1000];
+Food food[1000];
 
 //VERGEET NIET!!
 //SCHAAL VERSCHIL, WEGENS WISKUNDE SHIT

@@ -36,6 +36,7 @@ SimState::SimState(){
 	but.setColor(sf::Color::Black);
 	but.setTextPos(10, 1);
 
+	SimState * s = this;
 	pop.push_back(new Creature());
 	pop[0]->addNode(5, 0);
 	pop[0]->addNode(5, 2);
@@ -54,14 +55,16 @@ SimState::SimState(){
 	active->spawn();
 
 	for (int i = 0; i < foodsize; i++)
-		food.push_back(Food(foodpos[i]));
+		food[i] = Food(foodpos[i]);
+
+	active->findFood();
 }
 
 //Nu nog leeg...h
 void SimState::calculate() 
 {  
 	active->calculate();
-	for (int i = 0; i < food.size(); i++)
+	for (int i = 0; i < foodsize; i++)
 		food[i].check();
 }
 
@@ -80,7 +83,7 @@ void SimState::draw()
 	window.draw(ground);
 
 	active->draw();
-	for (int i = 0; i < food.size(); i++)
+	for (int i = 0; i < foodsize; i++)
 		food[i].draw();
 
 	//Tekent onderkant

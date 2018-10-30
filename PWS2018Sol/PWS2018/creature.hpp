@@ -3,6 +3,7 @@
 #include "main.hpp"
 #include "bodyparts.hpp"
 #include "NN.hpp"
+
 #include <vector>
 #include <Box2D/Box2D.h>
 
@@ -22,7 +23,12 @@ public:
 	void draw();
 	void calculate();
 	void despawn();
+	void eat(); //wat doen we als er wordt gegeten?
 	void addNode(float l, float a);
+	b2Vec2 getPos();
+	void findFood();
+private:
+	b2Vec2 nearestFood;
 	NN * nn;
 };
 

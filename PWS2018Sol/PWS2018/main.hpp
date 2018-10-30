@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include <Box2D\Box2D.h>
 #include "state.hpp"
+#include "food.hpp"
 
 //extern, omdat de definitie in main.cpp moet staan
 extern sf::RenderWindow window;
@@ -13,3 +14,4 @@ extern const float timestep;
 
 extern const int foodsize;
 extern b2Vec2 foodpos[];
+extern Food food[];

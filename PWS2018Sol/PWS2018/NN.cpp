@@ -15,7 +15,7 @@ void NN::calculate(float a, float b, float c, float d, float e, float f, float g
 {
 	//eten  richting & afstand
 	input[0] = a;
-	input[1] = fmin(1, b / 50);
+	input[1] = (float) fmin(1, b / 50);
 	
 	//benen
 	input[2] = c;
@@ -74,11 +74,11 @@ void NN::initweights() {
 
 	for (int i = 0; i < HIDDENSIZE; i++)
 		for (int j = 0; j < INPUTSIZE; j++)
-			weights1[j][i] = dis(gen);
+			weights1[j][i] = (float) dis(gen);
 
 	for (int i = 0; i < OUTPUTSIZE; i++)
 		for (int j = 0; j < HIDDENSIZE; j++)
-			weights2[j][i] = dis(gen);
+			weights2[j][i] = (float) dis(gen);
 
 	for (int i = 0; i < OUTPUTSIZE; i++)
 		output[i] = 0.0f;

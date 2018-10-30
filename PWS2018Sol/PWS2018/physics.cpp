@@ -12,7 +12,7 @@ b2World Phys::world(grav);
 
 bool initPhys = false;
 
-float radToDeg = 57.29578;
+float radToDeg = 57.29578f;
 
 void Phys::initPhysics() {
 	if (initPhys)

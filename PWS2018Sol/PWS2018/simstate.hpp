@@ -4,7 +4,6 @@
 #include "button.hpp"
 #include "physics.hpp"
 #include "creature.hpp"
-#include "food.hpp"
 #include <SFML/Graphics.hpp>
 #include <vector>
 
@@ -17,7 +16,6 @@ public:
 	//moet pointer zijn, omdat daadwerkelijke inhoud van n vector kan bewegen in memory
 	std::vector<Creature*> pop;
 	Creature * active;
-	std::vector<Food> food;
 private:
 	sf::View mapView, lowerView, upperView;
 	sf::VertexArray ground;

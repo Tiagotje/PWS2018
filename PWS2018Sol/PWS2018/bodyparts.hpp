@@ -25,7 +25,7 @@ private:
 	float sAngle;
 	b2Vec2 center;
 	float hx;
-	float hy = 0.2;
+	float hy = 0.2f;
 	float length;
 	sf::RectangleShape shape;
 };

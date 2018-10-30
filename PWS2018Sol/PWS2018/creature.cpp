@@ -1,8 +1,10 @@
 #include "creature.hpp"
 #include "physics.hpp"
 #include "NN.hpp"
+#include "food.hpp"
 
 #include <Box2D/Box2d.h>
+#include <iostream>
 
 Creature::Creature()
 {
@@ -45,7 +47,7 @@ void Creature::addNode(float l, float a)
 
 void Creature::calculate()
 {
-	nn->calculate(0.5, -0.39, 0.62, 0.42, -0.98, 0.07, -0.23);
+	nn->calculate(0.5f, -0.39f, 0.62f, 0.42f, -0.98f, 0.07f, -0.23f);
 	
 	for (int i = 0; i < OUTPUTSIZE && i < joints.size(); i++)
 	{
@@ -55,6 +57,34 @@ void Creature::calculate()
 	}
 }
 
+b2Vec2 Creature::getPos()
+{
+	return head.body->GetPosition();
+}
+
+void Creature::eat()
+{
+	std::cout << "nomnomnom" << std::endl;
+	findFood();
+}
+
+void Creature::findFood()
+{
+	float lowest = 10000.0f;
+	for (int i = 0; i<foodsize; i++)
+	{
+		Food f = food[i];
+		if (!f.body->IsActive())
+			continue;
+		if ((getPos() - f.p).Length() < lowest)
+		{
+			lowest = (getPos() - f.p).Length();
+			nearestFood = f.p;
+		}
+	}
+	b2Vec2 p = nearestFood;
+	std::cout << "nearest food at: " << p.x << ", " << p.y << std::endl;
+}
 void Node::addNode(float l, float a)
 {
 	nodes.push_back(Node(limb.getEnd(), l, angle+a, creature));

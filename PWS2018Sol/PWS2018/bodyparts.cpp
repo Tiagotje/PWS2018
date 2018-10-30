@@ -59,7 +59,7 @@ void Limb::draw()
 {
 	center = body->GetPosition();
 	float angle = body->GetAngle();
-	float radToDeg = 57.29578;
+	float radToDeg = 57.29578f;
 	float sfmlAngle = -angle * radToDeg; 
 	shape.setRotation(sfmlAngle);
 

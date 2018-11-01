@@ -158,6 +158,7 @@
     <ClCompile Include="button.cpp" />
     <ClCompile Include="bodyparts.cpp" />
     <ClCompile Include="creature.cpp" />
+    <ClCompile Include="genetics.cpp" />
     <ClCompile Include="menustate.cpp" />
     <ClCompile Include="NN.cpp" />
     <ClCompile Include="physics.cpp" />
@@ -172,6 +173,7 @@
     <ClInclude Include="button.hpp" />
     <ClInclude Include="creature.hpp" />
     <ClInclude Include="food.hpp" />
+    <ClInclude Include="genetics.hpp" />
     <ClInclude Include="menustate.hpp" />
     <ClInclude Include="NN.hpp" />
     <ClInclude Include="physics.hpp" />

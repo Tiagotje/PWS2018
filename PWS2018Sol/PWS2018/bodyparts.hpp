@@ -17,16 +17,17 @@ public:
 	b2Vec2 getEnd();
 	void spawn();
 	void draw();
+	void update(b2Vec2, float);
+	float length;
+	float sAngle;
 //s- = start-
 //hx & hy = half x & half y
 private: 
 	b2Vec2 sBegin;
 	b2Vec2 sEnd;
-	float sAngle;
 	b2Vec2 center;
 	float hx;
 	float hy = 0.2f;
-	float length;
 	sf::RectangleShape shape;
 };
 

@@ -14,7 +14,7 @@ class NN;
 class Creature {
 public:
 	Head head = Head(b2Vec2(0, 0));
-	std::vector<Limb*> limbs;
+	std::vector<Node*> limbs;
 	std::vector<b2RevoluteJoint*> joints;
 	Creature();
 	~Creature();
@@ -23,10 +23,12 @@ public:
 	void draw();
 	void calculate();
 	void despawn();
+	void updatePos();
 	void eat(); //wat doen we als er wordt gegeten?
 	void addNode(float l, float a);
 	b2Vec2 getPos();
 	void findFood();
+	void updateCreature();
 private:
 	b2Vec2 nearestFood;
 	NN * nn;
@@ -45,7 +47,10 @@ public:
 	void draw();
 	void addNode(float l, float a);
 	void setSpeed(float v);
+	void updatePos(b2Vec2);
 	void despawn();
+	int neuron; 
+	void updateCreature(Creature *);
 };
 
 

@@ -17,6 +17,9 @@
     <Filter Include="main">
       <UniqueIdentifier>{ea7b2710-7619-4e35-b85d-bbc962836985}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Genetics">
+      <UniqueIdentifier>{e13080de-01a4-4f8d-8694-2b5bc393546f}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="button.cpp">
@@ -51,6 +54,9 @@
     </ClCompile>
     <ClCompile Include="food.cpp">
       <Filter>Simulation</Filter>
+    </ClCompile>
+    <ClCompile Include="genetics.cpp">
+      <Filter>Genetics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -89,6 +95,9 @@
     </ClInclude>
     <ClInclude Include="food.hpp">
       <Filter>Simulation</Filter>
+    </ClInclude>
+    <ClInclude Include="genetics.hpp">
+      <Filter>Genetics</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

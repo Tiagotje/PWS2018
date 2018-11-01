@@ -10,6 +10,7 @@
 #include "button.hpp"
 #include "creature.hpp"
 #include "food.hpp"
+#include "genetics.hpp"
 
 void dab();
 
@@ -19,7 +20,7 @@ SimState::SimState(){
 	//Viewport geeft in fracties aan waar op het scherm deze getekend moet worden
 	upperView.reset(sf::FloatRect(0, 0, 1600, 45));
 	upperView.setViewport(sf::FloatRect(0.0f, 0.0f, 1.0f, 0.05f));
-	mapView.reset(sf::FloatRect(-1000, 0, 2000, 1000));
+	mapView.reset(sf::FloatRect(-1000, -100, 2000, 1000));
 	mapView.setViewport(sf::FloatRect(0.0f, 0.05f, 1.0f, 0.85f));
 	lowerView.reset(sf::FloatRect(0, 0, 1600, 90));
 	lowerView.setViewport(sf::FloatRect(0.0f, 0.9f, 1.0f, 0.1f));
@@ -36,22 +37,9 @@ SimState::SimState(){
 	but.setColor(sf::Color::Black);
 	but.setTextPos(10, 1);
 
-	SimState * s = this;
-	pop.push_back(new Creature());
-	pop[0]->addNode(5, 0);
-	pop[0]->addNode(5, 2);
-	pop[0]->addNode(5, 4);
-	pop[0]->nodes[2].addNode(3, 1);
-	pop[0]->nodes[0].addNode(5, 0);
+	pop = genPopulation();
 
-	pop.push_back(new Creature());
-	pop[1]->addNode(3, 1);
-	pop[1]->addNode(1, 2.5);
-	pop[1]->addNode(5, 3);
-	pop[1]->nodes[2].addNode(1, 1);
-	pop[1]->nodes[0].addNode(10, 0);
-
-	active = pop[0];
+	active = pop[creatureID];
 	active->spawn();
 
 	for (int i = 0; i < foodsize; i++)
@@ -99,6 +87,13 @@ void SimState::draw()
 	but.draw();
 }
 
+void SimState::nextCreature()
+{
+	active->despawn();
+	creatureID = (creatureID + 1) % 50;
+	active = pop[creatureID];
+	active->spawn();
+}
 
 void SimState::events(sf::Event ev)
 {
@@ -113,7 +108,10 @@ void SimState::events(sf::Event ev)
 		mapView.setCenter(mapView.getCenter() + sf::Vector2f(100, 0));
 	//If C is pressed: Reset cam pos & zoom
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
-		mapView.reset(sf::FloatRect(-1000, 200, 2000, 1000));
+		mapView.reset(sf::FloatRect(-1000, 100, 2000, 900));
+	//If N is pressed: NEXT CREATURE
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::N))
+		nextCreature();
 
 	//Do zoom
 	if (ev.type == sf::Event::MouseWheelScrolled)

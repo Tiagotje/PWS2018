@@ -85,6 +85,22 @@ void Creature::findFood()
 	b2Vec2 p = nearestFood;
 	std::cout << "nearest food at: " << p.x << ", " << p.y << std::endl;
 }
+
+void Creature::updateCreature()
+{
+	limbs.clear();
+	for (int i = 0; i < nodes.size(); i++)
+		nodes[i].updateCreature(this);
+}
+
+void Node::updateCreature(Creature * c)
+{
+	creature = c;
+	c->limbs.push_back(this);
+	for (int i = 0; i < nodes.size(); i++)
+		nodes[i].updateCreature(c);
+}
+
 void Node::addNode(float l, float a)
 {
 	nodes.push_back(Node(limb.getEnd(), l, angle+a, creature));
@@ -95,6 +111,7 @@ Node::Node(b2Vec2 b, float l, float a, Creature * c)
 	limb = Limb(b, l, a);
 	angle = a;
 	creature = c;
+	c->limbs.push_back(this);
 }
 
 void Node::spawn(b2Body * bod)
@@ -110,7 +127,6 @@ void Node::spawn(b2Body * bod)
 
 	for (int i = 0; i < nodes.size(); i++)
 		nodes[i].spawn(limb.body);
-	creature->limbs.push_back(&limb);
 }
 
 void Node::despawn()
@@ -119,7 +135,6 @@ void Node::despawn()
 	for (int i = 0; i < nodes.size(); i++)
 		nodes[i].despawn();
 }
-
 
 void Node::draw()
 {
@@ -133,4 +148,17 @@ void Node::setSpeed(float v)
 	joint->SetMotorSpeed(v);
 	joint->EnableMotor(true);
 	joint->SetMaxMotorTorque(1000);
+}
+
+void Creature::updatePos()
+{
+	for (int i = 0; i < nodes.size(); i++)
+		nodes[i].updatePos(b2Vec2(0,0));
+}
+
+void Node::updatePos(b2Vec2 b)
+{
+	limb.update(b, angle);
+	for (int i = 0; i < nodes.size(); i++)
+		nodes[i].updatePos(limb.getEnd());
 }

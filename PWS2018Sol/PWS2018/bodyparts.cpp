@@ -25,6 +25,17 @@ Limb::Limb(b2Vec2 b, float l, float a)
 			  pow(center.y-b.y, 2));
 }
 
+void Limb::update(b2Vec2 b, float a)
+{
+	sBegin = b;
+	float l = length;
+	sEnd = b2Vec2(b.x + cos(a)*l, b.y + sin(a)*l);
+	sAngle = a;
+	center = 0.5 * (sBegin + sEnd);
+	hx = sqrt(pow(center.x-b.x, 2) +
+			  pow(center.y-b.y, 2));
+}
+
 Limb::~Limb()
 {
 	if (body != NULL) {

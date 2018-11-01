@@ -17,6 +17,8 @@ public:
 	std::vector<Creature*> pop;
 	Creature * active;
 private:
+	void nextCreature();
+	int creatureID = 0;
 	sf::View mapView, lowerView, upperView;
 	sf::VertexArray ground;
 	Button but;

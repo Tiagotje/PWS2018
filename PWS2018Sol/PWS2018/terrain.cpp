@@ -83,7 +83,7 @@ void FoodposGen(std::vector<b2Vec2> data)
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_real_distribution<> dis(0, 50000);
+	std::uniform_real_distribution<> dis(0, 5000);
 
 	for (int i = 0; i < foodsize; i++)
 	{
@@ -100,7 +100,7 @@ void FoodposGen(std::vector<b2Vec2> data)
 		//factor = 0.0 tm 1.0 hoever bij punt 1 of punt 2
 		float factor = (xPos - p1.x) / (p2.x - p1.x);
 		//vind passende tussenpositie
-		float yPos = p1.y * (1 - factor) + p2.y * factor + 2;
+		float yPos = p1.y * (1 - factor) + p2.y * factor + 1 + dis(gen)/250;
 		foodpos[i] = b2Vec2(xPos, yPos);
 	}
 }

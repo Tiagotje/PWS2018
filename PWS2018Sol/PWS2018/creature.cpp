@@ -5,11 +5,18 @@
 
 #include <Box2D/Box2d.h>
 #include <iostream>
+#include <algorithm>
 
 Creature::Creature()
 {
 	nn = new NN(this);
 	nn->initweights();
+}
+
+Creature::Creature(Creature * a, Creature * b)
+{
+	parents[0] = a;
+	parents[1] = b;
 }
 
 Creature::~Creature()
@@ -21,14 +28,14 @@ void Creature::spawn()
 {
 	head.spawn();
 	for (int i = 0; i < nodes.size(); i++) {
-		nodes[i].spawn(head.body);
+		nodes[i]->spawn(head.body);
 	}
 }
 
 void Creature::despawn()
 {
 	for (int i = 0; i < nodes.size(); i++) {
-		nodes[i].despawn();
+		nodes[i]->despawn();
 	}
 }
 
@@ -36,24 +43,29 @@ void Creature::despawn()
 void Creature::draw()
 {
 	for (int i = 0; i<nodes.size(); i++)
-		nodes[i].draw();
+		nodes[i]->draw();
 	head.draw();
 }
 
-void Creature::addNode(float l, float a)
+void Creature::addNode(float l, float a, int n)
 {
-	nodes.push_back(Node(b2Vec2(0,0), l, a, this));
+	nodes.push_back(new Node(b2Vec2(0,0), l, a, n, this));
 }
 
 void Creature::calculate()
 {
-	nn->calculate(0.5f, -0.39f, 0.62f, 0.42f, -0.98f, 0.07f, -0.23f);
+	//richting, afstand
+	b2Vec2 delta = (nearestFood - getPos());
+	float distance = delta.Length();
+	delta.x /= distance;
+	delta.y /= distance;
+	nn->calculate(delta.x, distance, 0.62f, 0.42f, -0.98f, 0.07f, -0.23f);
 	
-	for (int i = 0; i < OUTPUTSIZE && i < joints.size(); i++)
-	{
-		joints[i]->EnableMotor(true);
-		joints[i]->SetMotorSpeed(nn->output[i] * 5);
-		joints[i]->SetMaxMotorTorque(100);
+	for (int i = 0; i < nodes.size(); i++)
+	{	
+		nodes[i]->joint->EnableMotor(true);
+		nodes[i]->joint->SetMotorSpeed(nn->output[nodes[i]->neuron] * 5);
+		nodes[i]->joint->SetMaxMotorTorque(100);
 	}
 }
 
@@ -90,7 +102,19 @@ void Creature::updateCreature()
 {
 	limbs.clear();
 	for (int i = 0; i < nodes.size(); i++)
-		nodes[i].updateCreature(this);
+		nodes[i]->updateCreature(this);
+}
+
+void Creature::deleteNodes(Node * n)
+{
+	for (Node * c : n->nodes)
+		deleteNodes(c);
+	limbs.erase(std::remove(limbs.begin(), limbs.end(), n), limbs.end());
+	for (int i = 0; i < nodes.size(); i++)
+		if (nodes[i] == n) {
+			nodes.erase(nodes.begin() + i);
+			break;
+		}
 }
 
 void Node::updateCreature(Creature * c)
@@ -98,19 +122,20 @@ void Node::updateCreature(Creature * c)
 	creature = c;
 	c->limbs.push_back(this);
 	for (int i = 0; i < nodes.size(); i++)
-		nodes[i].updateCreature(c);
+		nodes[i]->updateCreature(c);
 }
 
-void Node::addNode(float l, float a)
+void Node::addNode(float l, float a, int n)
 {
-	nodes.push_back(Node(limb.getEnd(), l, angle+a, creature));
+	nodes.push_back(new Node(limb.getEnd(), l, angle+a, n, creature));
 }
 
-Node::Node(b2Vec2 b, float l, float a, Creature * c)
+Node::Node(b2Vec2 b, float l, float a, int n, Creature * c)
 {
 	limb = Limb(b, l, a);
 	angle = a;
 	creature = c;
+	neuron = n;
 	c->limbs.push_back(this);
 }
 
@@ -126,21 +151,21 @@ void Node::spawn(b2Body * bod)
 	creature->joints.push_back(joint);
 
 	for (int i = 0; i < nodes.size(); i++)
-		nodes[i].spawn(limb.body);
+		nodes[i]->spawn(limb.body);
 }
 
 void Node::despawn()
 {
 	limb.~Limb();
 	for (int i = 0; i < nodes.size(); i++)
-		nodes[i].despawn();
+		nodes[i]->despawn();
 }
 
 void Node::draw()
 {
 	limb.draw();
 	for (int i = 0; i<nodes.size(); i++)
-		nodes[i].draw();
+		nodes[i]->draw();
 }
 
 void Node::setSpeed(float v)
@@ -153,12 +178,22 @@ void Node::setSpeed(float v)
 void Creature::updatePos()
 {
 	for (int i = 0; i < nodes.size(); i++)
-		nodes[i].updatePos(b2Vec2(0,0));
+		nodes[i]->updatePos(b2Vec2(0,0));
 }
 
 void Node::updatePos(b2Vec2 b)
 {
 	limb.update(b, angle);
 	for (int i = 0; i < nodes.size(); i++)
-		nodes[i].updatePos(limb.getEnd());
+		nodes[i]->updatePos(limb.getEnd());
+}
+
+int Node::nodecount()
+{
+	if (nodes.size() == 0)
+		return 0;
+	int tot = nodes.size();
+	for (Node * n : nodes)
+		tot += n->nodecount();
+	return tot;
 }

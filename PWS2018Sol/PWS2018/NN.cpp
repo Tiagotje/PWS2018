@@ -11,11 +11,11 @@ NN::NN(Creature * c)
 
 int times = 0;
 
-void NN::calculate(float a, float b, float c, float d, float e, float f, float g)
+void NN::calculate(float richting, float afstand, float c, float d, float e, float f, float g)
 {
 	//eten  richting & afstand
-	input[0] = a;
-	input[1] = (float) fmin(1, b / 50);
+	input[0] = richting;
+	input[1] = (float) fmin(1, afstand / 50);
 	
 	//benen
 	input[2] = c;

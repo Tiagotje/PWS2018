@@ -15,6 +15,8 @@
 #define HIDDENSIZE 10
 #define OUTPUTSIZE 10
 
+const int outputsize = OUTPUTSIZE;
+
 class Creature;
 
 class NN {
@@ -23,6 +25,8 @@ public:
 	NN(Creature * c);
 	float weights1[INPUTSIZE][HIDDENSIZE];
 	float weights2[HIDDENSIZE][OUTPUTSIZE];
+	unsigned char dominance1[INPUTSIZE];
+	unsigned char dominance2[HIDDENSIZE];
 	float input[INPUTSIZE];
 	float hidden[HIDDENSIZE];
 	float output[OUTPUTSIZE];

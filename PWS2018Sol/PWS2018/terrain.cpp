@@ -111,11 +111,11 @@ sf::VertexArray TerrainGen()
 	//Start de Random Number Generator op
 	std::srand(time(NULL));
 	//Genereert linker & rechter deel, -200 tot 200 = beginplatform
-	std::vector<sf::Vector2f> right = Gen(200, 50000, 10, 150, 650, false);
+	std::vector<sf::Vector2f> right = Gen(200, 50000, 10, -50, 450, false);
 	//Zet de punten in de juiste volgorde van links -> rechts
 	std::vector<sf::Vector2f> line;
-	line.push_back(sf::Vector2f(-200, 400));
-	line.push_back(sf::Vector2f(200, 400));
+	line.push_back(sf::Vector2f(-200, 200));
+	line.push_back(sf::Vector2f(200, 200));
 	for (int i = 0; i < right.size(); i++)
 		line.push_back(right[i]);
 

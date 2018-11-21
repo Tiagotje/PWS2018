@@ -20,7 +20,7 @@ SimState::SimState(){
 	//Viewport geeft in fracties aan waar op het scherm deze getekend moet worden
 	upperView.reset(sf::FloatRect(0, 0, 1600, 45));
 	upperView.setViewport(sf::FloatRect(0.0f, 0.0f, 1.0f, 0.05f));
-	mapView.reset(sf::FloatRect(-1000, -100, 2000, 1000));
+	mapView.reset(sf::FloatRect(-1000, -300, 2000, 1000));
 	mapView.setViewport(sf::FloatRect(0.0f, 0.05f, 1.0f, 0.85f));
 	lowerView.reset(sf::FloatRect(0, 0, 1600, 90));
 	lowerView.setViewport(sf::FloatRect(0.0f, 0.9f, 1.0f, 0.1f));
@@ -38,6 +38,8 @@ SimState::SimState(){
 	but.setTextPos(10, 1);
 
 	pop = genPopulation();
+
+	std::cout << "cID = " << creatureID << std::endl;
 
 	active = pop[creatureID];
 	active->spawn();
@@ -91,12 +93,17 @@ void SimState::nextCreature()
 {
 	active->despawn();
 	creatureID = (creatureID + 1) % 50;
+	std::cout << "cID = " << creatureID << std::endl;
 	active = pop[creatureID];
 	active->spawn();
+	active->findFood();
 }
+
+int cooldown = 1;
 
 void SimState::events(sf::Event ev)
 {
+	cooldown++;
 	//Wanneer op kruisje geklikt wordt
 	if (ev.type == sf::Event::Closed)
 		window.close();
@@ -108,10 +115,12 @@ void SimState::events(sf::Event ev)
 		mapView.setCenter(mapView.getCenter() + sf::Vector2f(100, 0));
 	//If C is pressed: Reset cam pos & zoom
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
-		mapView.reset(sf::FloatRect(-1000, 100, 2000, 900));
+		mapView.reset(sf::FloatRect(-1000, -300, 2000, 900));
 	//If N is pressed: NEXT CREATURE
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::N))
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::N) && cooldown > 10) {
 		nextCreature();
+		cooldown = 0;
+	}
 
 	//Do zoom
 	if (ev.type == sf::Event::MouseWheelScrolled)

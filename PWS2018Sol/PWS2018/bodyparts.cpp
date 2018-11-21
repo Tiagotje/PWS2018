@@ -115,7 +115,7 @@ void Head::spawn()
 	b2BodyDef bd;
 	bd.type = b2_dynamicBody;
 	bd.position.Set(pos.x, pos.y);
-	bd.fixedRotation = true;
+	bd.fixedRotation = false;
 	body = Phys::world.CreateBody(&bd);
 	b2CircleShape cs;
 	cs.m_p.Set(0, 0);

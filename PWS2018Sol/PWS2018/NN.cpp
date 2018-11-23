@@ -53,18 +53,6 @@ void NN::calculate(float richting, float afstand, float c, float d, float e, flo
 
 	for (int i = 0; i < OUTPUTSIZE; i++)
 		output[i] = sigmoid(output[i]);
-
-
-	//print output 0 tm 14 (zie patroon!)
-	if (times < 15)
-	{
-		std::cout << "Output: ";
-		for (int i = 0; i < OUTPUTSIZE; i++)
-			std::cout << output[i] << (i+1 == OUTPUTSIZE ? "" : ", ");
-		std::cout << std::endl;
-	}
-
-	times++;
 }
 
 void NN::initweights() {

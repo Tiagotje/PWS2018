@@ -100,7 +100,7 @@ void FoodposGen(std::vector<b2Vec2> data)
 		//factor = 0.0 tm 1.0 hoever bij punt 1 of punt 2
 		float factor = (xPos - p1.x) / (p2.x - p1.x);
 		//vind passende tussenpositie
-		float yPos = p1.y * (1 - factor) + p2.y * factor + 1 + dis(gen)/250;
+		float yPos = p1.y * (1 - factor) + p2.y * factor + 1 + dis(gen)/500;
 		foodpos[i] = b2Vec2(xPos, yPos);
 	}
 }

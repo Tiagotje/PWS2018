@@ -3,6 +3,8 @@
 #include "creature.hpp"
 #include <random>
 
+#define POPSIZE 50
+
 std::vector<Creature*> genPopulation();
 void mutate(Creature * c);
 

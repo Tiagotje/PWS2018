@@ -12,6 +12,8 @@
 #include "food.hpp"
 #include "genetics.hpp"
 
+SimState * ss;
+
 void dab();
 
 SimState::SimState(){
@@ -31,8 +33,9 @@ SimState::SimState(){
 	//De testknop
 	but.setView(upperView);
 	but.setFont(Util::dafont);
-	but.setText("D E R P", 25);
+	but.setText("NEXT", 25);
 	but.setSize(sf::FloatRect(150, 5, 100, 35));
+	ss = this;
 	but.setFunc(dab);
 	but.setColor(sf::Color::Black);
 	but.setTextPos(10, 1);
@@ -50,17 +53,20 @@ SimState::SimState(){
 	active->findFood();
 }
 
+void dab() {
+	ss->nextCreature();
+}
+
 //Nu nog leeg...h
 void SimState::calculate() 
 {  
+	if (active->energy < 0.0f)
+		nextCreature();
+	if (active->getPos().x < -20.0f)
+		nextCreature();
 	active->calculate();
 	for (int i = 0; i < foodsize; i++)
 		food[i].check();
-}
-
-void dab()
-{
-	std::cout << "Dit doet niets!!" << std::endl;
 }
 
 
@@ -91,7 +97,19 @@ void SimState::draw()
 
 void SimState::nextCreature()
 {
+	b2Vec2 p = active->getPos();
+	int f;
+	if (p.x < 0)
+		f = 0;
+	else
+		f = p.x + 20 * active->foodcount;
+	fitness[creatureID] = f;
+	std::cout << "Creature " << creatureID << " has a fitness of: " << f << std::endl;
 	active->despawn();
+
+	for (int i = 0; i < foodsize; i++)
+		food[i].body->SetActive(true);
+
 	creatureID = (creatureID + 1) % 50;
 	std::cout << "cID = " << creatureID << std::endl;
 	active = pop[creatureID];
@@ -117,7 +135,7 @@ void SimState::events(sf::Event ev)
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
 		mapView.reset(sf::FloatRect(-1000, -300, 2000, 900));
 	//If N is pressed: NEXT CREATURE
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::N) && cooldown > 10) {
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::N) && cooldown > 3) {
 		nextCreature();
 		cooldown = 0;
 	}

@@ -11,6 +11,12 @@ Creature::Creature()
 {
 	nn = new NN(this);
 	nn->initweights();
+
+	addNode(4, 0, 0);
+	addNode(4, (-0.5*b2_pi), 1);
+	addNode(4, b2_pi, 2);
+	nodes[0]->addNode(4, (-0.5*b2_pi), 3);
+	nodes[2]->addNode(4, (0.5*b2_pi), 4);
 }
 
 Creature::Creature(Creature * a, Creature * b)
@@ -58,15 +64,16 @@ void Creature::calculate()
 	b2Vec2 delta = (nearestFood - getPos());
 	float distance = delta.Length();
 	delta.x /= distance;
-	delta.y /= distance;
 	nn->calculate(delta.x, distance, 0.62f, 0.42f, -0.98f, 0.07f, -0.23f);
 	
 	for (int i = 0; i < nodes.size(); i++)
 	{	
 		nodes[i]->joint->EnableMotor(true);
 		nodes[i]->joint->SetMotorSpeed(nn->output[nodes[i]->neuron] * 5);
-		nodes[i]->joint->SetMaxMotorTorque(100);
+		nodes[i]->joint->SetMaxMotorTorque(1000);
 	}
+	//energy
+	energy -= 0.1f;
 }
 
 b2Vec2 Creature::getPos()
@@ -76,7 +83,8 @@ b2Vec2 Creature::getPos()
 
 void Creature::eat()
 {
-	std::cout << "nomnomnom" << std::endl;
+	energy += 300.0f;
+	foodcount++;
 	findFood();
 }
 

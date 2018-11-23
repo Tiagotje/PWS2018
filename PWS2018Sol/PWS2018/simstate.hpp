@@ -4,6 +4,7 @@
 #include "button.hpp"
 #include "physics.hpp"
 #include "creature.hpp"
+#include "genetics.hpp"
 #include <SFML/Graphics.hpp>
 #include <vector>
 
@@ -15,9 +16,10 @@ public:
 	void events(sf::Event);
 	//moet pointer zijn, omdat daadwerkelijke inhoud van n vector kan bewegen in memory
 	std::vector<Creature*> pop;
+	float fitness[POPSIZE];
 	Creature * active;
-private:
 	void nextCreature();
+private:
 	int creatureID = 0;
 	sf::View mapView, lowerView, upperView;
 	sf::VertexArray ground;

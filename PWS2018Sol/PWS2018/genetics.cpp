@@ -31,22 +31,12 @@ std::vector<Creature*> genPopulation()
 	//popsize = 50?
 	std::vector<Creature*> pop;
 
-	Creature * basis = new Creature();
-	basis->addNode(4, 0, 0);
-	basis->addNode(4, (-0.5*b2_pi), 1);
-	basis->addNode(4, b2_pi, 2);
-	basis->nodes[0]->addNode(4, (-0.5*b2_pi), 3);
-	basis->nodes[2]->addNode(4, (0.5*b2_pi), 4);
-
-
-
-	for (int i = 0; i < 50; i++) {
-		pop.push_back(new Creature(*basis));
-		pop[i]->updateCreature();
+	for (int i = 0; i < POPSIZE; i++) {
+		pop.push_back(new Creature());
 	}
-		
-	for (int i = 0; i < 50; i++) {
-		for (int j = 0; j < 200; j++)
+
+	for (int i = 0; i < POPSIZE; i++) {
+		for (int j = 0; j < 20; j++)
 			mutate(pop[i]);
 		pop[i]->updatePos();
 	}
@@ -63,6 +53,22 @@ double clamp(double min, double x, double max)
 }
 
 
+float randL() {
+	std::normal_distribution<double> L(1.6, 0.5);
+	return (float)clamp(2.0, pow(L(gen), 2), 6.0);
+}
+
+float randA() {
+	std::normal_distribution<double> A(0.0, 75.0);
+	return A(gen) / 360 * 2 * b2_pi;
+}
+
+int randN() {
+	std::uniform_int_distribution<> N(0, 9);
+	return N(gen);
+}
+
+
 void mutate(Creature * c)
 {
 	while (genetics::lengtemut(gen) < 1) {
@@ -72,7 +78,7 @@ void mutate(Creature * c)
 		double f = factor(gen);
 		if (f < 1.0)
 			f = 1/(2 - f);
-		c->limbs[L]->limb.length = clamp(2.0, f*c->limbs[L]->limb.length, 10.0);
+		c->limbs[L]->limb.length = clamp(2.0, f*c->limbs[L]->limb.length, 6.0);
 	}
 
 	while (genetics::hoekmut(gen) < 1) {
@@ -98,12 +104,29 @@ void mutate(Creature * c)
 		while (!removed) {
 			std::uniform_int_distribution<> node(0, c->limbs.size() - 1);
 			Node * n = c->limbs[node(gen)];
-			if(n->nodecount() > 0){
-				std::uniform_int_distribution<> node(0, n->nodecount());
-				if (node(gen) >= 1)
-					continue;
-			}
+			std::uniform_int_distribution<> subnodes(0, n->nodecount());
+			if (subnodes(gen) >= 1)
+				continue;
 			c->deleteNodes(n);
+			removed = true;
+		}
+	}
+
+	while (genetics::groeimut(gen) < 1) {
+		bool added = false;
+		if (c->limbs.size() > 12)
+			break;
+		std::uniform_int_distribution<> newlimb(0, c->limbs.size());
+		if(newlimb(gen) < 3){
+			c->addNode(randL(), randA(), randN());
+		}
+		while (!added) {
+			std::uniform_int_distribution<> node(0, c->limbs.size() - 1);
+			Node * n = c->limbs[node(gen)];
+			if(n->nodecount() < 7){
+				n->addNode(randL(), randA(), randN());
+				added = true;
+			}
 		}
 	}
 }

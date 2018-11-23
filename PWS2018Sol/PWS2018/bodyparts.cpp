@@ -39,7 +39,6 @@ void Limb::update(b2Vec2 b, float a)
 Limb::~Limb()
 {
 	if (body != NULL) {
-		std::cout << "NOOO LIMB DESTROYED" << std::endl;
 		body->GetWorld()->DestroyBody(body);
 	}
 }

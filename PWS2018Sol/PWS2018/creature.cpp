@@ -205,3 +205,14 @@ int Node::nodecount()
 		tot += n->nodecount();
 	return tot;
 }
+
+bool Node::contains(Node* n)
+{
+	for (int i = 0; i < nodes.size(); i++) {
+		if (nodes[i] == n) 
+			return true;
+		if (nodes[i]->contains(n))
+			return true;
+	}
+	return false;
+}

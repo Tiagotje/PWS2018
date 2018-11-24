@@ -117,11 +117,8 @@ void SimState::nextCreature()
 	active->findFood();
 }
 
-int cooldown = 1;
-
 void SimState::events(sf::Event ev)
 {
-	cooldown++;
 	//Wanneer op kruisje geklikt wordt
 	if (ev.type == sf::Event::Closed)
 		window.close();
@@ -134,11 +131,6 @@ void SimState::events(sf::Event ev)
 	//If C is pressed: Reset cam pos & zoom
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::C))
 		mapView.reset(sf::FloatRect(-1000, -300, 2000, 900));
-	//If N is pressed: NEXT CREATURE
-	if (sf::Keyboard::isKeyPressed(sf::Keyboard::N) && cooldown > 3) {
-		nextCreature();
-		cooldown = 0;
-	}
 
 	//Do zoom
 	if (ev.type == sf::Event::MouseWheelScrolled)

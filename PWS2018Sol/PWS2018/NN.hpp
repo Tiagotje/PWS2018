@@ -23,6 +23,7 @@ class NN {
 public:
 	NN() {};
 	NN(Creature * c);
+	NN(NN * nn);
 	float weights1[INPUTSIZE][HIDDENSIZE];
 	float weights2[HIDDENSIZE][OUTPUTSIZE];
 	float dominance1[INPUTSIZE];

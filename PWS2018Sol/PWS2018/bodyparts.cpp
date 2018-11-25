@@ -103,7 +103,8 @@ Head::Head(b2Vec2 p) {
 }
 
 Head::~Head() {
-	body->GetWorld()->DestroyBody(body);
+	if(body != NULL && body->GetWorld() != NULL)
+		body->GetWorld()->DestroyBody(body);
 }
 
 

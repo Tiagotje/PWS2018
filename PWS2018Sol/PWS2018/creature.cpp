@@ -24,11 +24,15 @@ Creature::Creature(Creature * a, Creature * b)
 	parents[0] = a;
 	parents[1] = b;
 	nn = fenonn(a, b);
+	Creature f = feno(a, b);
+	nodes = f.nodes;
+	updateCreatureNodes();
 }
 
 Creature::~Creature()
 {
-	delete nn;
+	if (nn != NULL)
+		delete nn;
 }
 
 void Creature::spawn()
@@ -217,4 +221,33 @@ bool Node::contains(Node* n)
 			return true;
 	}
 	return false;
+}
+
+void Creature::updateCreatureNodes()
+{
+	for (int i = 0; i < nodes.size(); i++)
+		nodes[i]->updateCreatureLimbs(this);
+}
+
+void Node::updateCreatureLimbs(Creature * c) {
+	creature = c;
+	c->limbs.push_back(this);
+	for (int i = 0; i < nodes.size(); i++)
+		nodes[i]->updateCreatureLimbs(c);
+}
+
+Node::Node(Node * n) {
+	dominance = n->dominance;
+	angle = n->angle;
+	neuron = n->neuron;
+	limb = Limb(n->limb.getBegin(), n->limb.length, n->limb.sAngle);
+	for (int i = 0; i < n->nodes.size(); i++)
+		nodes.push_back( new Node( n->nodes[i] ) );
+}
+
+Creature::Creature(Creature * c) {
+	head = Head(b2Vec2(0, 0));
+	for (int i = 0; i < c->nodes.size(); i++)
+		nodes.push_back( new Node( c->nodes[i] ) );
+	nn = new NN(c->nn);
 }

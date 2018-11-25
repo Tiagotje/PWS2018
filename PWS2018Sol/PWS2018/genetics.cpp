@@ -1,5 +1,6 @@
 #include <random>
 #include <iostream>
+#include <cstring>
 #include "genetics.hpp"
 
 //Soorten mutaties:
@@ -11,7 +12,7 @@
 //Extra ledematen  1/10 yes
 //Minder ledematen 1/10 yes
 //Ander outputnummer spier 1/5 yes
-//dominantie 1/8 per ding!
+//dominantie 1/8 per ding! yes
 //
 //MENTAAL:
 //Verandering gewicht = 1/10 per gewicht!
@@ -42,6 +43,19 @@ std::vector<Creature*> genPopulation()
 			mutate(pop[i]);
 		pop[i]->updatePos();
 	}
+
+	for (int i = 0; i < POPSIZE; i++) {
+		pop[i]->limbs.clear();
+		pop[i]->updateCreatureNodes();
+	}
+
+	std::cout << "dab" << std::endl;
+
+	//testing
+	pop[4] = new Creature(pop[2], pop[3]);
+
+	std::cout << "dab" << std::endl;
+
 	return pop;
 }
 
@@ -206,4 +220,75 @@ void mutategenotype(Creature* p) {
 
 NN* fenonn(Creature* a, Creature* b) {
 	NN* nn = new NN();
+	NN* na = a->nn;
+	NN* nb = b->nn;
+	NN* source;
+	for (int i = 0; i < INPUTSIZE; i++) {
+		if (na->dominance1[i] > nb->dominance1[i])
+			source = na;
+		else
+			source = nb;
+		std::memcpy(nn->weights1[i], source->weights1[i], sizeof(float) * HIDDENSIZE);
+		nn->dominance1[i] = source->dominance1[i];
+	}
+	for (int i = 0; i < HIDDENSIZE; i++) {
+		if (na->dominance2[i] > nb->dominance2[i])
+			source = na;
+		else
+			source = nb;
+		std::memcpy(nn->weights2[i], source->weights2[i], sizeof(float) * OUTPUTSIZE);
+		nn->dominance2[i] = source->dominance2[i];
+	}
+
+	return nn;
+}
+
+
+void crossingover(Creature * a, Creature * b) {
+	std::uniform_int_distribution<> genA(0, a->nodes.size() - 1);
+	std::uniform_int_distribution<> genB(0, b->nodes.size() - 1);
+	Node * na = a->limbs[genA(gen)];
+	Node * nb = b->limbs[genB(gen)];
+	Node * pna = getParent(a, na);
+	Node * pnb = getParent(b, nb);
+	if (pna == NULL)
+		for (int i = 0; i < a->nodes.size(); i++)
+			if (a->nodes[i] == na)
+				a->nodes[i] = nb;
+	if (pnb == NULL)
+		for (int i = 0; i < b->nodes.size(); i++)
+			if (b->nodes[i] == nb)
+				b->nodes[i] = na;
+	if (pna != NULL)
+		for (int i = 0; i < pna->nodes.size(); i++)
+			if (pna->nodes[i] == na)
+				pna->nodes[i] = nb;
+	if (pnb != NULL)
+		for (int i = 0; i < pnb->nodes.size(); i++)
+			if (pnb->nodes[i] == nb)
+				pnb->nodes[i] = na;
+	a->limbs.clear();
+	b->limbs.clear();
+	a->updateCreatureNodes();
+	b->updateCreatureNodes();
+}
+
+//a + b -> c
+//1. doe random geschud 5x
+//2. grootste dominance wint
+//functie returnt de 'fenotype' creature en de OG creature kopieert gwn hiervan
+Creature feno(Creature* p1, Creature* p2) {
+	Creature a = Creature(p1);
+	Creature b = Creature(p2);
+	a.updateCreatureNodes();
+	b.updateCreatureNodes();
+	for (int i = 0; i < 5; i++)
+		crossingover(&a, &b);
+	float domA = 0;
+	float domB = 0;
+	for (int i = 0; i < a.limbs.size(); i++)
+		domA += a.limbs[i]->dominance;
+	for (int i = 0; i < b.limbs.size(); i++)
+		domB += b.limbs[i]->dominance;
+	return (domA > domB ? a : b);
 }

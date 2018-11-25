@@ -3,6 +3,7 @@
 #include <math.h>
 #include <iostream>
 #include <random>
+#include <cstring>
 
 
 NN::NN(Creature * c)
@@ -19,6 +20,16 @@ NN::NN(Creature * c)
 
 	initweights();
 }
+
+NN::NN(NN * nn)
+{
+	//just copy data
+	std::memcpy(weights1[0], nn->weights1[0], sizeof(float)*INPUTSIZE*HIDDENSIZE);
+	std::memcpy(weights2[0], nn->weights2[0], sizeof(float)*HIDDENSIZE*OUTPUTSIZE);
+	std::memcpy(dominance1, nn->dominance1, sizeof(float)*INPUTSIZE);
+	std::memcpy(dominance2, nn->dominance2, sizeof(float)*HIDDENSIZE);
+}
+
 
 int times = 0;
 

@@ -9,6 +9,7 @@ std::vector<Creature*> genPopulation();
 void mutate(Creature * c);
 void mutategenotype(Creature * p);
 NN* fenonn(Creature* a, Creature* b);
+Creature feno(Creature * a, Creature * b);
 
 
 namespace genetics {

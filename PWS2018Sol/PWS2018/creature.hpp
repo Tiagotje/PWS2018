@@ -15,10 +15,10 @@ class Creature {
 public:
 	Creature();
 	Creature(Creature *, Creature *);
+	Creature(Creature *); // copy constr
 	~Creature();
 	Creature * parents[2];
 	std::vector<Node*> nodes;
-	std::vector<unsigned char> dominance;
 	Head head = Head(b2Vec2(0, 0));
 	std::vector<Node*> limbs;
 	std::vector<b2RevoluteJoint*> joints;
@@ -35,6 +35,7 @@ public:
 	void findFood();
 	void updateCreature();
 	void deleteNodes(Node * n);
+	void updateCreatureNodes();
 	NN * nn;
 private:
 	b2Vec2 nearestFood;
@@ -43,6 +44,7 @@ private:
 
 class Node {
 public:
+	Node(Node * n);
 	Node(b2Vec2 b, float l, float a, int n, Creature * c, float d);
 	Limb limb;
 	b2RevoluteJoint * joint;
@@ -55,9 +57,10 @@ public:
 	void addNode(float l, float a, int n, float d);
 	void setSpeed(float v);
 	void updatePos(b2Vec2);
+	void updateCreature(Creature * c);
 	void despawn();
 	int nodecount();
 	int neuron; 
-	void updateCreature(Creature *);
+	void updateCreatureLimbs(Creature *);
 	bool contains(Node*);
 };

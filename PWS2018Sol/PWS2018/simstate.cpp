@@ -107,6 +107,8 @@ void SimState::nextCreature()
 	std::cout << "Creature " << creatureID << " has a fitness of: " << f << std::endl;
 	active->despawn();
 
+	Phys::updatePhysics(timestep);
+
 	for (int i = 0; i < foodsize; i++)
 		food[i].body->SetActive(true);
 

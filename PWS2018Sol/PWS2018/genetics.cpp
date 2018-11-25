@@ -5,11 +5,11 @@
 //Soorten mutaties:
 //
 //PHYSIEK:
-//Lengte mutaties 1/2
-//Hoek mutaties   1/3
+//Lengte mutaties 1/2 yes
+//Hoek mutaties   1/3 yes
 //Swap mutatie    1/10
-//Extra ledematen  1/10
-//Minder ledematen 1/10
+//Extra ledematen  1/10 yes
+//Minder ledematen 1/10 yes
 //Ander outputnummer spier 1/5
 //dominantie 1/8 per ding!
 //
@@ -19,7 +19,7 @@ std::uniform_real_distribution<> genetics::lengtemut(0, 2);
 std::uniform_real_distribution<> genetics::hoekmut(0, 3);
 std::uniform_real_distribution<> genetics::spiermut(0, 5);
 std::uniform_real_distribution<> genetics::swapmut(0, 10);
-std::uniform_real_distribution<> genetics::groeimut(0, 10);
+std::uniform_real_distribution<> genetics::groeimut(0, 15);
 std::uniform_real_distribution<> genetics::amputatiemut(0, 10);
 std::uniform_real_distribution<> genetics::gewichtmut(0, 10);
 
@@ -36,7 +36,7 @@ std::vector<Creature*> genPopulation()
 	}
 
 	for (int i = 0; i < POPSIZE; i++) {
-		for (int j = 0; j < 20; j++)
+		for (int j = 0; j < 10; j++)
 			mutate(pop[i]);
 		pop[i]->updatePos();
 	}
@@ -68,10 +68,22 @@ int randN() {
 	return N(gen);
 }
 
+Node* getParent(Creature* c, Node* n) {
+	for (int i = 0; i < c->limbs.size(); i++) {
+		Node* p = c->limbs[i];
+		for (int j = 0; j < p->nodes.size(); j++) {
+			if (p->nodes[j] == n)
+				return p;
+		}
+	}
+	return NULL;
+}
 
 void mutate(Creature * c)
 {
 	while (genetics::lengtemut(gen) < 1) {
+		if (c->limbs.size() == 0)
+			break;
 		std::uniform_int_distribution<> limb(0, c->limbs.size()-1);
 		std::normal_distribution<double> factor(1.0, 0.25);
 		int L = limb(gen);
@@ -104,6 +116,8 @@ void mutate(Creature * c)
 		while (!removed) {
 			std::uniform_int_distribution<> node(0, c->limbs.size() - 1);
 			Node * n = c->limbs[node(gen)];
+			if (c->limbs.size() - n->nodecount() < 3)
+				continue;
 			std::uniform_int_distribution<> subnodes(0, n->nodecount());
 			if (subnodes(gen) >= 1)
 				continue;
@@ -127,6 +141,43 @@ void mutate(Creature * c)
 				n->addNode(randL(), randA(), randN());
 				added = true;
 			}
+		}
+	}
+
+	while (genetics::swapmut(gen) < 1) {
+		int tries = 0;
+		while (tries < 10) {
+			std::uniform_int_distribution<> node(0, c->limbs.size() - 1);
+			Node * a = c->limbs[node(gen)];
+			Node * b = c->limbs[node(gen)];
+			if (a->contains(b) || b->contains(a) || a == b) {
+				tries++;
+				continue;
+			}
+			Node * pa = getParent(c, a);
+			Node * pb = getParent(c, b);
+			if (pa != NULL) {
+				for (int i = 0; i < pa->nodes.size(); i++)
+					if (pa->nodes[i] == a)
+						pa->nodes[i] = b;
+			}
+			else {
+				for (int i = 0; i < c->nodes.size(); i++)
+					if (c->nodes[i] == a)
+						c->nodes[i] = b;
+			}
+
+			if (pb != NULL) {
+				for (int i = 0; i < pb->nodes.size(); i++)
+					if (pb->nodes[i] == b)
+						pb->nodes[i] = a;
+			}
+			else {
+				for (int i = 0; i < c->nodes.size(); i++)
+					if (c->nodes[i] == b)
+						c->nodes[i] = a;
+			}
+			break;
 		}
 	}
 }

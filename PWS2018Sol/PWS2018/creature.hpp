@@ -58,6 +58,7 @@ public:
 	int nodecount();
 	int neuron; 
 	void updateCreature(Creature *);
+	bool contains(Node*);
 };
 
 

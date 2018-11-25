@@ -47,7 +47,7 @@ int main()
 	sf::Clock clock;
 	float frame = 0;
 
-	bool fixFPS = true;
+	bool fixFPS = false;
 
 	while (window.isOpen())
 	{

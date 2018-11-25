@@ -25,8 +25,8 @@ public:
 	NN(Creature * c);
 	float weights1[INPUTSIZE][HIDDENSIZE];
 	float weights2[HIDDENSIZE][OUTPUTSIZE];
-	unsigned char dominance1[INPUTSIZE];
-	unsigned char dominance2[HIDDENSIZE];
+	float dominance1[INPUTSIZE];
+	float dominance2[HIDDENSIZE];
 	float input[INPUTSIZE];
 	float hidden[HIDDENSIZE];
 	float output[OUTPUTSIZE];

@@ -40,6 +40,7 @@ Limb::~Limb()
 {
 	if (body != NULL) {
 		body->GetWorld()->DestroyBody(body);
+		body = NULL;
 	}
 }
 

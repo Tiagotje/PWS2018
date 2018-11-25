@@ -2,6 +2,7 @@
 #include "physics.hpp"
 #include "NN.hpp"
 #include "food.hpp"
+#include "genetics.hpp"
 
 #include <Box2D/Box2d.h>
 #include <iostream>
@@ -10,19 +11,19 @@
 Creature::Creature()
 {
 	nn = new NN(this);
-	nn->initweights();
 
-	addNode(4, 0, 0);
-	addNode(4, (-0.5*b2_pi), 1);
-	addNode(4, b2_pi, 2);
-	nodes[0]->addNode(4, (-0.5*b2_pi), 3);
-	nodes[2]->addNode(4, (0.5*b2_pi), 4);
+	addNode(4, 0, 0, 0.36);
+	addNode(4, (-0.5*b2_pi), 1, 0.42);
+	addNode(4, b2_pi, 2, 0.83);
+	nodes[0]->addNode(4, (-0.5*b2_pi), 3, 0.39);
+	nodes[2]->addNode(4, (0.5*b2_pi), 4, 0.61);
 }
 
 Creature::Creature(Creature * a, Creature * b)
 {
 	parents[0] = a;
 	parents[1] = b;
+	nn = fenonn(a, b);
 }
 
 Creature::~Creature()
@@ -53,9 +54,9 @@ void Creature::draw()
 	head.draw();
 }
 
-void Creature::addNode(float l, float a, int n)
+void Creature::addNode(float l, float a, int n, float d)
 {
-	nodes.push_back(new Node(b2Vec2(0,0), l, a, n, this));
+	nodes.push_back(new Node(b2Vec2(0,0), l, a, n, this, d));
 }
 
 void Creature::calculate()
@@ -133,18 +134,19 @@ void Node::updateCreature(Creature * c)
 		nodes[i]->updateCreature(c);
 }
 
-void Node::addNode(float l, float a, int n)
+void Node::addNode(float l, float a, int n, float d)
 {
-	nodes.push_back(new Node(limb.getEnd(), l, angle+a, n, creature));
+	nodes.push_back(new Node(limb.getEnd(), l, angle+a, n, creature, d));
 }
 
-Node::Node(b2Vec2 b, float l, float a, int n, Creature * c)
+Node::Node(b2Vec2 b, float l, float a, int n, Creature * c, float d)
 {
 	limb = Limb(b, l, a);
 	angle = a;
 	creature = c;
 	neuron = n;
 	c->limbs.push_back(this);
+	dominance = d;
 }
 
 void Node::spawn(b2Body * bod)

@@ -30,28 +30,29 @@ public:
 	void despawn();
 	void updatePos();
 	void eat(); //wat doen we als er wordt gegeten?
-	void addNode(float l, float a, int n);
+	void addNode(float l, float a, int n, float d);
 	b2Vec2 getPos();
 	void findFood();
 	void updateCreature();
 	void deleteNodes(Node * n);
+	NN * nn;
 private:
 	b2Vec2 nearestFood;
-	NN * nn;
 };
 
 
 class Node {
 public:
-	Node(b2Vec2 b, float l, float a, int n, Creature * c);
+	Node(b2Vec2 b, float l, float a, int n, Creature * c, float d);
 	Limb limb;
 	b2RevoluteJoint * joint;
 	Creature * creature;
 	std::vector<Node*> nodes;
+	float dominance;
 	float angle;
 	void spawn(b2Body * parent);
 	void draw();
-	void addNode(float l, float a, int n);
+	void addNode(float l, float a, int n, float d);
 	void setSpeed(float v);
 	void updatePos(b2Vec2);
 	void despawn();
@@ -60,5 +61,3 @@ public:
 	void updateCreature(Creature *);
 	bool contains(Node*);
 };
-
-

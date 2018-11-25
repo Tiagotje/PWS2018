@@ -7,6 +7,8 @@
 
 std::vector<Creature*> genPopulation();
 void mutate(Creature * c);
+void mutategenotype(Creature * p);
+NN* fenonn(Creature* a, Creature* b);
 
 
 namespace genetics {
@@ -17,4 +19,5 @@ namespace genetics {
 	extern std::uniform_real_distribution<> groeimut;
 	extern std::uniform_real_distribution<> amputatiemut;
 	extern std::uniform_real_distribution<> gewichtmut;
+	extern std::uniform_real_distribution<> dominantiemut;
 }

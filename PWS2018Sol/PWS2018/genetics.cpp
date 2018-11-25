@@ -7,14 +7,15 @@
 //PHYSIEK:
 //Lengte mutaties 1/2 yes
 //Hoek mutaties   1/3 yes
-//Swap mutatie    1/10
+//Swap mutatie    1/10 yes
 //Extra ledematen  1/10 yes
 //Minder ledematen 1/10 yes
-//Ander outputnummer spier 1/5
+//Ander outputnummer spier 1/5 yes
 //dominantie 1/8 per ding!
 //
 //MENTAAL:
 //Verandering gewicht = 1/10 per gewicht!
+
 std::uniform_real_distribution<> genetics::lengtemut(0, 2);
 std::uniform_real_distribution<> genetics::hoekmut(0, 3);
 std::uniform_real_distribution<> genetics::spiermut(0, 5);
@@ -22,6 +23,7 @@ std::uniform_real_distribution<> genetics::swapmut(0, 10);
 std::uniform_real_distribution<> genetics::groeimut(0, 15);
 std::uniform_real_distribution<> genetics::amputatiemut(0, 10);
 std::uniform_real_distribution<> genetics::gewichtmut(0, 10);
+std::uniform_real_distribution<> genetics::dominantiemut(0, 8);
 
 std::random_device rd;
 std::mt19937 gen(rd());
@@ -66,6 +68,11 @@ float randA() {
 int randN() {
 	std::uniform_int_distribution<> N(0, 9);
 	return N(gen);
+}
+
+float randD() {
+	std::uniform_real_distribution<float> D(0, 1.0);
+	return D(gen);
 }
 
 Node* getParent(Creature* c, Node* n) {
@@ -132,13 +139,13 @@ void mutate(Creature * c)
 			break;
 		std::uniform_int_distribution<> newlimb(0, c->limbs.size());
 		if(newlimb(gen) < 3){
-			c->addNode(randL(), randA(), randN());
+			c->addNode(randL(), randA(), randN(), randD());
 		}
 		while (!added) {
 			std::uniform_int_distribution<> node(0, c->limbs.size() - 1);
 			Node * n = c->limbs[node(gen)];
 			if(n->nodecount() < 7){
-				n->addNode(randL(), randA(), randN());
+				n->addNode(randL(), randA(), randN(), randD());
 				added = true;
 			}
 		}
@@ -180,4 +187,23 @@ void mutate(Creature * c)
 			break;
 		}
 	}
+}
+
+void mutategenotype(Creature* p) {
+	for (int i = 0; i < p->limbs.size(); i++)
+		if (genetics::dominantiemut(gen) < 1)
+			p->limbs[i]->dominance = randD();
+
+	for (int i = 0; i < INPUTSIZE; i++)
+		if (genetics::dominantiemut(gen) < 1)
+			p->nn->dominance1[i] = randD();
+
+	for (int i = 0; i < HIDDENSIZE; i++)
+		if (genetics::dominantiemut(gen) < 1)
+			p->nn->dominance2[i] = randD();
+			
+}
+
+NN* fenonn(Creature* a, Creature* b) {
+	NN* nn = new NN();
 }

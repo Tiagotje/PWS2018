@@ -4,9 +4,20 @@
 #include <iostream>
 #include <random>
 
+
 NN::NN(Creature * c)
 {
 	creature = c;
+
+	std::random_device rd;
+	std::mt19937 gen(rd());
+	std::uniform_real_distribution<> dis(0.0, 1.0);
+	for (int i = 0; i < INPUTSIZE; i++) 
+		dominance1[i] = dis(gen);
+	for (int i = 0; i < HIDDENSIZE; i++) 
+		dominance2[i] = dis(gen);
+
+	initweights();
 }
 
 int times = 0;

@@ -29,9 +29,15 @@ Creature::Creature(Creature * a, Creature * b)
 	updateCreatureNodes();
 }
 
+Creature::Creature(Creature * c) {
+	for (int i = 0; i < c->nodes.size(); i++)
+		nodes.push_back(new Node(c->nodes[i]));
+	nn = NULL;
+}
+
 Creature::~Creature()
 {
-	if (nn != NULL)
+	if(nn!=NULL)
 		delete nn;
 }
 
@@ -243,11 +249,4 @@ Node::Node(Node * n) {
 	limb = Limb(n->limb.getBegin(), n->limb.length, n->limb.sAngle);
 	for (int i = 0; i < n->nodes.size(); i++)
 		nodes.push_back( new Node( n->nodes[i] ) );
-}
-
-Creature::Creature(Creature * c) {
-	head = Head(b2Vec2(0, 0));
-	for (int i = 0; i < c->nodes.size(); i++)
-		nodes.push_back( new Node( c->nodes[i] ) );
-	nn = new NN(c->nn);
 }

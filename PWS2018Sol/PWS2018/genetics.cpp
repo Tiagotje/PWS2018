@@ -49,12 +49,8 @@ std::vector<Creature*> genPopulation()
 		pop[i]->updateCreatureNodes();
 	}
 
-	std::cout << "dab" << std::endl;
-
 	//testing
 	pop[4] = new Creature(pop[2], pop[3]);
-
-	std::cout << "dab" << std::endl;
 
 	return pop;
 }
@@ -280,6 +276,8 @@ void crossingover(Creature * a, Creature * b) {
 Creature feno(Creature* p1, Creature* p2) {
 	Creature a = Creature(p1);
 	Creature b = Creature(p2);
+	a.limbs.clear();
+	b.limbs.clear();
 	a.updateCreatureNodes();
 	b.updateCreatureNodes();
 	for (int i = 0; i < 5; i++)

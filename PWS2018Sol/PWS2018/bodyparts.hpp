@@ -35,7 +35,7 @@ class Head {
 public:
 	Head(b2Vec2 p);
 	~Head();
-	b2Body * body;
+	b2Body * body = NULL;
 	b2Vec2 pos;
 	void spawn();
 	void draw();

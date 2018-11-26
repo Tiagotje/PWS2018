@@ -22,6 +22,7 @@ class Creature;
 class NN {
 public:
 	NN() {};
+	~NN() {};
 	NN(Creature * c);
 	NN(NN * nn);
 	float weights1[INPUTSIZE][HIDDENSIZE];

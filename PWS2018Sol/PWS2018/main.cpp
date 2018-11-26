@@ -45,9 +45,10 @@ int main()
 	state = new MenuState();
 
 	sf::Clock clock;
-	float frame = 0;
+	float frame = 1;
 
-	bool fixFPS = true;
+	bool slow = false;
+	bool fixFPS = false;
 
 	while (window.isOpen())
 	{
@@ -55,8 +56,11 @@ int main()
 		state->calculate();
 		Phys::updatePhysics(timestep);
 
-		state->draw();
-		window.display();
+		if (slow | clock.getElapsedTime() > sf::milliseconds(15 * frame)) {
+			frame++;
+			state->draw();
+			window.display();
+		}
 
 		if(fixFPS)
 			sf::sleep(sf::milliseconds(10)-clock.restart());

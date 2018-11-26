@@ -112,11 +112,20 @@ void SimState::nextCreature()
 	for (int i = 0; i < foodsize; i++)
 		food[i].body->SetActive(true);
 
-	creatureID = (creatureID + 1) % 50;
-	std::cout << "cID = " << creatureID << std::endl;
-	active = pop[creatureID];
-	active->spawn();
-	active->findFood();
+	creatureID++;
+	if (creatureID < POPSIZE) {
+		std::cout << "cID = " << creatureID << std::endl;
+		active = pop[creatureID];
+		active->spawn();
+		active->findFood();
+	} else {
+		std::cout << "NEW GEN!!!! :D :D :D" << std::endl;
+		pop = genNewPop(pop, fitness);
+		creatureID = 0;
+		active = pop[0];
+		active->spawn();
+		active->findFood();
+	}
 }
 
 void SimState::events(sf::Event ev)

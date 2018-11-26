@@ -2,14 +2,17 @@
 
 #include "creature.hpp"
 #include <random>
+#include <vector>
 
-#define POPSIZE 50
+#define POPSIZE 15
 
 std::vector<Creature*> genPopulation();
 void mutate(Creature * c);
 void mutategenotype(Creature * p);
 NN* fenonn(Creature* a, Creature* b);
 Creature feno(Creature * a, Creature * b);
+Creature gengeno(Creature * c);
+std::vector<Creature *> genNewPop(std::vector<Creature *> old, float * fitness);
 
 
 namespace genetics {

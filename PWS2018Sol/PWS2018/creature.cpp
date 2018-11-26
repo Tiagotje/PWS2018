@@ -21,8 +21,8 @@ Creature::Creature()
 
 Creature::Creature(Creature * a, Creature * b)
 {
-	parents[0] = a;
-	parents[1] = b;
+	parents[0] = new Creature(a);
+	parents[1] = new Creature(b);
 	nn = fenonn(a, b);
 	Creature f = feno(a, b);
 	nodes = f.nodes;
@@ -32,13 +32,13 @@ Creature::Creature(Creature * a, Creature * b)
 Creature::Creature(Creature * c) {
 	for (int i = 0; i < c->nodes.size(); i++)
 		nodes.push_back(new Node(c->nodes[i]));
-	nn = NULL;
+	nn = new NN(c->nn);
 }
 
 Creature::~Creature()
 {
-	if(nn!=NULL)
-		delete nn;
+	//if(nn != NULL)
+	//	delete nn;
 }
 
 void Creature::spawn()

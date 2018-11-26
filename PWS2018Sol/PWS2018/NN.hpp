@@ -10,6 +10,7 @@
 #pragma once
 
 #include "creature.hpp"
+#include <iostream>
 
 #define INPUTSIZE 17
 #define HIDDENSIZE 10
@@ -22,7 +23,7 @@ class Creature;
 class NN {
 public:
 	NN() {};
-	~NN() {};
+	//~NN() { std::cout << "~nn" << std::endl; };
 	NN(Creature * c);
 	NN(NN * nn);
 	float weights1[INPUTSIZE][HIDDENSIZE];

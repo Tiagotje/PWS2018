@@ -32,27 +32,105 @@ std::mt19937 gen(rd());
 std::vector<Creature*> genPopulation()
 {
 	//popsize = 50?
-	std::vector<Creature*> pop;
+	std::vector<Creature*> parpop;
 
 	for (int i = 0; i < POPSIZE; i++) {
-		pop.push_back(new Creature());
+		parpop.push_back(new Creature());
+		parpop[i]->nn->initweights();
 	}
 
 	for (int i = 0; i < POPSIZE; i++) {
 		for (int j = 0; j < 10; j++)
-			mutate(pop[i]);
-		pop[i]->updatePos();
+			mutate(parpop[i]);
+		parpop[i]->updatePos();
 	}
 
 	for (int i = 0; i < POPSIZE; i++) {
-		pop[i]->limbs.clear();
-		pop[i]->updateCreatureNodes();
+		parpop[i]->limbs.clear();
+		parpop[i]->updateCreatureNodes();
 	}
 
-	//testing
-	pop[4] = new Creature(pop[2], pop[3]);
+	std::vector<Creature*> pop;
 
+	std::uniform_int_distribution<> chooseparents(0, POPSIZE - 1);
+	for (int i = 0; i < POPSIZE; i++) {
+		int a = chooseparents(gen);
+		int b = chooseparents(gen);
+		if (a == b)
+			b = (b + 1) % POPSIZE;
+		pop.push_back(new Creature(parpop[a], parpop[b]));
+	}
+	
 	return pop;
+}
+
+int * OLDroulette(std::vector<Creature *> old, float * fitness, float sum) {
+	std::uniform_real_distribution<float> dist(0.0, sum - 0.1f);
+	int ret[2];
+	ret[0] = -1;
+	ret[1] = -1;
+	float val = dist(gen);
+	for (int j = 0; j < POPSIZE; j++) {
+		val -= fitness[j];
+		if (val <= 0.0f) {
+			ret[0] = j; break;
+		}
+	}
+	if (ret[0] == -1)
+		ret[0] = POPSIZE - 1;
+	std::uniform_real_distribution<float> dist2(0.0, sum - fitness[ret[0]] - 0.1f);
+	val = dist(gen);
+	std::cout << val << std::endl;
+	for (int j = 0; j < POPSIZE; j++) {
+		if (j == ret[0])
+			continue;
+		val -= fitness[j];
+		if (val <= 0.0f) {
+			ret[1] = j; break;
+		}
+	}
+	if (ret[1] == -1)
+		ret[1] = POPSIZE - 1;
+	return ret;
+}
+
+std::vector<int> roulette(std::vector<Creature *> old, float * fitness) {
+	std::vector<int> ret;
+
+	std::vector<int> list;
+	for (int i = 0; i < POPSIZE; i++) {
+		int v = (int)fitness[i];
+		for (int j = 0; j < v; j++)
+			list.push_back(i);
+	}
+
+	std::uniform_int_distribution<> dist1(0, list.size() - 1);
+	int i = list[dist1(gen)];
+	ret.push_back(i);
+
+	list.erase(std::remove(list.begin(), list.end(), i), list.end());
+
+	std::uniform_int_distribution<> dist2(0, list.size() - 1);
+	i = list[dist1(gen)];
+	ret.push_back(i);
+
+	return ret;
+}
+
+std::vector<Creature *> genNewPop(std::vector<Creature *> old, float * fitness) {
+	std::vector<Creature *> newpop;
+	float sum = 0.0f;
+	for (int i = 0; i < POPSIZE; i++)
+		sum += fitness[i];
+
+	for (int i = 0; i < POPSIZE; i++) {
+		std::vector<int> ids = roulette(old, fitness);
+		std::cout << "[0] " << ids[0] << "[1] " << ids[1] << std::endl;
+		Creature a = gengeno(old[ids[0]]);
+		Creature b = gengeno(old[ids[1]]);
+		newpop.push_back(new Creature(&a, &b));
+	}
+	return newpop;
 }
 
 double clamp(double min, double x, double max)
@@ -282,6 +360,8 @@ Creature feno(Creature* p1, Creature* p2) {
 	b.updateCreatureNodes();
 	for (int i = 0; i < 5; i++)
 		crossingover(&a, &b);
+	a.updatePos();
+	b.updatePos();
 	float domA = 0;
 	float domB = 0;
 	for (int i = 0; i < a.limbs.size(); i++)
@@ -289,4 +369,66 @@ Creature feno(Creature* p1, Creature* p2) {
 	for (int i = 0; i < b.limbs.size(); i++)
 		domB += b.limbs[i]->dominance;
 	return (domA > domB ? a : b);
+}
+
+
+void swapfloat(float &a, float &b) {
+	float c = a;
+	a = b;
+	b = c;
+}
+
+void crossNN(NN* a, NN* b) {
+	std::uniform_int_distribution<> dist(0, 9);
+	bool swap = true;
+	//w1
+	for (int i = 0; i < INPUTSIZE; i++)
+		for (int j = 0; j < HIDDENSIZE; j++) {
+			if (swap)
+				swapfloat(a->weights1[i][j], b->weights1[i][j]);
+			if (dist(gen) == 0)
+				swap = !swap;
+		}
+
+	//w2
+	for (int i = 0; i < HIDDENSIZE; i++)
+		for (int j = 0; j < OUTPUTSIZE; j++) {
+			if (swap)
+				swapfloat(a->weights2[i][j], b->weights2[i][j]);
+			if (dist(gen) == 0)
+				swap = !swap;
+		}
+	
+	//d1
+	for (int i = 0; i < INPUTSIZE; i++)
+		if (swap)
+			swapfloat(a->dominance1[i], b->dominance1[i]);
+		if (dist(gen) == 0)
+			swap = !swap;
+
+	//d2
+	for (int i = 0; i < HIDDENSIZE; i++)
+		if (swap)
+			swapfloat(a->dominance2[i], b->dominance2[i]);
+		if (dist(gen) == 0)
+			swap = !swap;
+	
+}
+
+Creature gengeno(Creature * c) {
+	Creature a = Creature(c->parents[0]);
+	Creature b = Creature(c->parents[1]);
+	a.limbs.clear();
+	b.limbs.clear();
+	a.updateCreatureNodes();
+	b.updateCreatureNodes();
+	for (int i = 0; i < 5; i++)
+		crossingover(&a, &b);
+	a.updatePos();
+	NN* na = c->parents[0]->nn;
+	NN* nb = c->parents[1]->nn;
+	crossNN(na, nb);
+	delete a.nn;
+	a.nn = na;
+	return a;
 }

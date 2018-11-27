@@ -15,6 +15,8 @@
 SimState * ss;
 
 void dab();
+void setslow();
+void setpauze();
 
 int genID = 0;
 float gensum = 0.0f;
@@ -33,15 +35,34 @@ SimState::SimState(){
 	//Genereert de grond; 
 	ground = TerrainGen();
 
-	//De testknop
-	but.setView(upperView);
-	but.setFont(Util::dafont);
-	but.setText("NEXT", 25);
-	but.setSize(sf::FloatRect(150, 5, 100, 35));
+	//nextbut
+	nextbut.setView(upperView);
+	nextbut.setFont(Util::dafont);
+	nextbut.setText("NEXT", 25);
+	nextbut.setSize(sf::FloatRect(150, 5, 100, 35));
 	ss = this;
-	but.setFunc(dab);
-	but.setColor(sf::Color::Black);
-	but.setTextPos(10, 1);
+	nextbut.setFunc(dab);
+	nextbut.setColor(sf::Color::Black);
+	nextbut.setTextPos(10, 1);
+
+	//pauzebut
+	pauzebut.setView(upperView);
+	pauzebut.setFont(Util::dafont);
+	pauzebut.setText("PAUZE", 25);
+	pauzebut.setSize(sf::FloatRect(300, 5, 150, 35));
+	pauzebut.setFunc(setpauze);
+	pauzebut.setColor(sf::Color::Green);
+	pauzebut.setTextPos(10, 1);
+
+	//slow
+	slowbut.setView(upperView);
+	slowbut.setFont(Util::dafont);
+	slowbut.setText("SLOW", 25);
+	slowbut.setSize(sf::FloatRect(600, 5, 150, 35));
+	slowbut.setFunc(setslow);
+	slowbut.setColor(sf::Color::Red);
+	slowbut.setTextPos(10, 1);
+
 
 	pop = genPopulation();
 
@@ -54,6 +75,14 @@ SimState::SimState(){
 		food[i] = Food(foodpos[i]);
 
 	active->findFood();
+}
+
+void setpauze() {
+	pauze = !pauze;
+}
+
+void setslow() {
+	slow = !slow;
 }
 
 void dab() {
@@ -95,7 +124,9 @@ void SimState::draw()
 	window.setView(upperView);
 	rect.setSize(sf::Vector2f(1600, 45));
 	window.draw(rect);
-	but.draw();
+	nextbut.draw();
+	slowbut.draw();
+	pauzebut.draw();
 }
 
 void SimState::nextCreature()
@@ -156,7 +187,9 @@ void SimState::events(sf::Event ev)
 	if (sf::Mouse::isButtonPressed(sf::Mouse::Left))
 	{
 		sf::Vector2i pos = sf::Mouse::getPosition(window);
-		but.checkMouse(pos);
+		nextbut.checkMouse(pos);
+		slowbut.checkMouse(pos);
+		pauzebut.checkMouse(pos);
 		window.setView(mapView);
 	}
 }

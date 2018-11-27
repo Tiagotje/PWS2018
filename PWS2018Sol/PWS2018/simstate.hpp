@@ -23,5 +23,7 @@ private:
 	int creatureID = 0;
 	sf::View mapView, lowerView, upperView;
 	sf::VertexArray ground;
-	Button but;
+	Button nextbut;
+	Button pauzebut;
+	Button slowbut;
 };

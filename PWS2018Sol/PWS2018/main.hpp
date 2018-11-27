@@ -15,3 +15,6 @@ extern const float timestep;
 extern const int foodsize;
 extern b2Vec2 foodpos[];
 extern Food food[];
+
+extern bool pauze;
+extern bool slow;

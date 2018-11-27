@@ -25,6 +25,9 @@ const int foodsize = 200;
 b2Vec2 foodpos[200];
 Food food[200];
 
+bool pauze = false;
+bool slow = false;
+
 //VERGEET NIET!!
 //SCHAAL VERSCHIL, WEGENS WISKUNDE SHIT
 //1 UNIT IN BOX2D = 10 UNITS IN SFML!!
@@ -47,22 +50,23 @@ int main()
 	sf::Clock clock;
 	float frame = 1;
 
-	bool slow = false;
-	bool fixFPS = false;
-
 	while (window.isOpen())
 	{
 		events();
-		state->calculate();
-		Phys::updatePhysics(timestep);
+		
+		if (!pauze) {
+			state->calculate();
+			Phys::updatePhysics(timestep);
+		}
 
-		if (slow | clock.getElapsedTime() > sf::milliseconds(15 * frame)) {
+		if (slow | clock.getElapsedTime() > sf::milliseconds(15)) {
 			frame++;
 			state->draw();
 			window.display();
+			clock.restart();
 		}
 
-		if(fixFPS)
+		if(slow)
 			sf::sleep(sf::milliseconds(10)-clock.restart());
 		iter++;
 	}

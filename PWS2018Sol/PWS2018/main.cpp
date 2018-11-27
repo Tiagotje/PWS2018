@@ -44,7 +44,7 @@ int main()
 	//Laad alle lettertypes aan het begin
 	Util::initFonts();
 	Phys::initPhysics();
-	window.create(sf::VideoMode(1600, 900), "SFML works!", sf::Style::Titlebar | sf::Style::Close);
+	window.create(sf::VideoMode(1600, 900), "Evolutie simulatie", sf::Style::Titlebar | sf::Style::Close);
 	state = new MenuState();
 
 	sf::Clock clock;

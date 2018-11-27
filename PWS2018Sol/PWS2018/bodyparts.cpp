@@ -123,7 +123,7 @@ void Head::spawn()
 	cs.m_radius = r;
 	b2FixtureDef fd;
 	fd.shape = &cs;
-	fd.density = 1.0f;
+	fd.density = 0.3f;
 	fd.friction = 0.3f;
 	fd.restitution = 0.2f;
 	fd.filter.categoryBits = 2;

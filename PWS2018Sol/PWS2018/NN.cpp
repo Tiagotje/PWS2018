@@ -33,24 +33,20 @@ NN::NN(NN * nn)
 
 int times = 0;
 
-void NN::calculate(float richting, float afstand, float c, float d, float e, float f, float g)
+void NN::calculate(float richting, float afstand, float honger)
 {
+	input[0] = 1.0f;
+
 	//eten  richting & afstand
-	input[0] = richting;
-	input[1] = (float) fmin(1, afstand / 50);
-	
-	//benen
-	input[2] = c;
-	input[3] = d;
-	input[4] = e;
-	input[5] = f;
+	input[1] = richting;
+	input[2] = sigmoid(afstand/10);
 
 	//honger
-	input[6] = g;
+	input[3] = sigmoid((honger-1000)/1000);
 
 	//proprioceptie
 	for (int i = 0; i < OUTPUTSIZE; i++)
-		input[7 + i] = output[i];
+		input[3 + i] = output[i];
 
 	//HIDDEN LAYER
 	for (int i = 0; i < HIDDENSIZE; i++)

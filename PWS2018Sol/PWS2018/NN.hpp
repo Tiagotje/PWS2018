@@ -12,7 +12,7 @@
 #include "creature.hpp"
 #include <iostream>
 
-#define INPUTSIZE 17
+#define INPUTSIZE 14
 #define HIDDENSIZE 10
 #define OUTPUTSIZE 10
 
@@ -33,7 +33,7 @@ public:
 	float input[INPUTSIZE];
 	float hidden[HIDDENSIZE];
 	float output[OUTPUTSIZE];
-	void calculate(float a, float b, float c, float d, float e, float f, float g);
+	void calculate(float, float, float);
 	void initweights();
 private:
 	inline float sigmoid(float v);

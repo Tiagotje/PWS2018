@@ -17,14 +17,14 @@
 //MENTAAL:
 //Verandering gewicht = 1/10 per gewicht!
 
-std::uniform_real_distribution<> genetics::lengtemut(0, 2);
-std::uniform_real_distribution<> genetics::hoekmut(0, 3);
-std::uniform_real_distribution<> genetics::spiermut(0, 5);
-std::uniform_real_distribution<> genetics::swapmut(0, 10);
-std::uniform_real_distribution<> genetics::groeimut(0, 15);
-std::uniform_real_distribution<> genetics::amputatiemut(0, 10);
-std::uniform_real_distribution<> genetics::gewichtmut(0, 10);
-std::uniform_real_distribution<> genetics::dominantiemut(0, 8);
+std::uniform_real_distribution<> genetics::lengtemut(0,5);
+std::uniform_real_distribution<> genetics::hoekmut(0,5);
+std::uniform_real_distribution<> genetics::spiermut(0,10);
+std::uniform_real_distribution<> genetics::swapmut(0,20);
+std::uniform_real_distribution<> genetics::groeimut(0,20);
+std::uniform_real_distribution<> genetics::amputatiemut(0,20);
+std::uniform_real_distribution<> genetics::gewichtmut(0,25);
+std::uniform_real_distribution<> genetics::dominantiemut(0,10);
 
 std::random_device rd;
 std::mt19937 gen(rd());
@@ -64,36 +64,6 @@ std::vector<Creature*> genPopulation()
 	return pop;
 }
 
-int * OLDroulette(std::vector<Creature *> old, float * fitness, float sum) {
-	std::uniform_real_distribution<float> dist(0.0, sum - 0.1f);
-	int ret[2];
-	ret[0] = -1;
-	ret[1] = -1;
-	float val = dist(gen);
-	for (int j = 0; j < POPSIZE; j++) {
-		val -= fitness[j];
-		if (val <= 0.0f) {
-			ret[0] = j; break;
-		}
-	}
-	if (ret[0] == -1)
-		ret[0] = POPSIZE - 1;
-	std::uniform_real_distribution<float> dist2(0.0, sum - fitness[ret[0]] - 0.1f);
-	val = dist(gen);
-	std::cout << val << std::endl;
-	for (int j = 0; j < POPSIZE; j++) {
-		if (j == ret[0])
-			continue;
-		val -= fitness[j];
-		if (val <= 0.0f) {
-			ret[1] = j; break;
-		}
-	}
-	if (ret[1] == -1)
-		ret[1] = POPSIZE - 1;
-	return ret;
-}
-
 std::vector<int> roulette(std::vector<Creature *> old, float * fitness) {
 	std::vector<int> ret;
 
@@ -110,9 +80,14 @@ std::vector<int> roulette(std::vector<Creature *> old, float * fitness) {
 
 	list.erase(std::remove(list.begin(), list.end(), i), list.end());
 
-	std::uniform_int_distribution<> dist2(0, list.size() - 1);
-	i = list[dist1(gen)];
-	ret.push_back(i);
+	if (list.size() == 0) {
+		ret.push_back(0);
+	}
+	else {
+		std::uniform_int_distribution<> dist2(0, list.size() - 1);
+		i = list[dist1(gen)];
+		ret.push_back(i);
+	}
 
 	return ret;
 }
@@ -143,13 +118,13 @@ double clamp(double min, double x, double max)
 
 
 float randL() {
-	std::normal_distribution<double> L(1.6, 0.5);
-	return (float)clamp(2.0, pow(L(gen), 2), 6.0);
+	std::uniform_real_distribution<float> L(2.0, 5.0);
+	return L(gen);
 }
 
 float randA() {
-	std::normal_distribution<double> A(0.0, 75.0);
-	return A(gen) / 360 * 2 * b2_pi;
+	std::uniform_real_distribution<float> A(-b2_pi, b2_pi);
+	return A(gen);
 }
 
 int randN() {
@@ -179,20 +154,14 @@ void mutate(Creature * c)
 		if (c->limbs.size() == 0)
 			break;
 		std::uniform_int_distribution<> limb(0, c->limbs.size()-1);
-		std::normal_distribution<double> factor(1.0, 0.25);
 		int L = limb(gen);
-		double f = factor(gen);
-		if (f < 1.0)
-			f = 1/(2 - f);
-		c->limbs[L]->limb.length = clamp(2.0, f*c->limbs[L]->limb.length, 6.0);
+		c->limbs[L]->limb.length = randL();
 	}
 
 	while (genetics::hoekmut(gen) < 1) {
 		std::uniform_int_distribution<> limb(0, c->limbs.size() - 1);
-		std::normal_distribution<double> factor(0.0, 1.0);
 		int L = limb(gen);
-		double f = factor(gen);
-		double val = f + c->limbs[L]->angle;
+		float val = randA();
 		c->limbs[L]->angle = val;
 		c->limbs[L]->limb.sAngle = val;
 	}
@@ -371,7 +340,7 @@ Creature feno(Creature* p1, Creature* p2) {
 	b.limbs.clear();
 	a.updateCreatureNodes();
 	b.updateCreatureNodes();
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < 2; i++)
 		crossingover(&a, &b);
 	a.updatePos();
 	b.updatePos();
@@ -381,6 +350,8 @@ Creature feno(Creature* p1, Creature* p2) {
 		domA += a.limbs[i]->dominance;
 	for (int i = 0; i < b.limbs.size(); i++)
 		domB += b.limbs[i]->dominance;
+	domA = domA / a.limbs.size();
+	domB = domB / b.limbs.size();
 	return (domA > domB ? a : b);
 }
 

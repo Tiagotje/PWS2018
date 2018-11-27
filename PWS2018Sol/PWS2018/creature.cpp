@@ -75,7 +75,7 @@ void Creature::calculate()
 	b2Vec2 delta = (nearestFood - getPos());
 	float distance = delta.Length();
 	delta.x /= distance;
-	nn->calculate(delta.x, distance, 0.62f, 0.42f, -0.98f, 0.07f, -0.23f);
+	nn->calculate(delta.x, distance, energy);
 	
 	for (int i = 0; i < nodes.size(); i++)
 	{	
@@ -94,7 +94,7 @@ b2Vec2 Creature::getPos()
 
 void Creature::eat()
 {
-	energy += 300.0f;
+	energy +=  1000.0f;
 	foodcount++;
 	findFood();
 }

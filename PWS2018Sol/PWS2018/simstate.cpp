@@ -66,8 +66,6 @@ SimState::SimState(){
 
 	pop = genPopulation();
 
-	std::cout << "cID = " << creatureID << std::endl;
-
 	active = pop[creatureID];
 	active->spawn();
 
@@ -153,7 +151,7 @@ void SimState::nextCreature()
 		active->spawn();
 		active->findFood();
 	} else {
-		std::cout << "Gemiddelde fitheid: " << gensum / POPSIZE << std::endl;
+		std::cout << "Gen: " << genID++ << ", gemiddelde fitheid: " << gensum / POPSIZE << std::endl;
 		gensum = 0.0f;
 		//std::cout << "New gen: " << genID++ << std::endl;
 		pop = genNewPop(pop, fitness);

@@ -18,12 +18,11 @@
 sf::RenderWindow window;
 
 State * state;
-float FPS = 1000;
 int iter = 0;
-const float timestep = 60;
-const int foodsize = 200;
-b2Vec2 foodpos[200];
-Food food[200];
+const float timestep = 30;
+const int foodsize = 400;
+b2Vec2 foodpos[400];
+Food food[400];
 
 bool pauze = false;
 bool slow = false;

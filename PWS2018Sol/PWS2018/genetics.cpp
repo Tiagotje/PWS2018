@@ -125,7 +125,6 @@ std::vector<Creature *> genNewPop(std::vector<Creature *> old, float * fitness) 
 
 	for (int i = 0; i < POPSIZE; i++) {
 		std::vector<int> ids = roulette(old, fitness);
-		std::cout << "[0] " << ids[0] << "[1] " << ids[1] << std::endl;
 		Creature a = gengeno(old[ids[0]]);
 		Creature b = gengeno(old[ids[1]]);
 		newpop.push_back(new Creature(&a, &b));
@@ -292,6 +291,20 @@ void mutategenotype(Creature* p) {
 			
 }
 
+void mutateNN(NN* nn) {
+	std::uniform_real_distribution<float> weight(-1.0, 1.0);
+
+	for (int i = 0; i < INPUTSIZE; i++)
+		for (int j = 0; j < HIDDENSIZE; j++)
+			if (genetics::gewichtmut(gen) < 1)
+				nn->weights1[i][j] = weight(gen);
+
+	for (int i = 0; i < HIDDENSIZE; i++)
+		for (int j = 0; j < OUTPUTSIZE; j++)
+			if (genetics::gewichtmut(gen) < 1)
+				nn->weights1[i][j] = weight(gen);
+}
+
 NN* fenonn(Creature* a, Creature* b) {
 	NN* nn = new NN();
 	NN* na = a->nn;
@@ -430,5 +443,7 @@ Creature gengeno(Creature * c) {
 	crossNN(na, nb);
 	delete a.nn;
 	a.nn = na;
+	mutate(&a);
+	mutategenotype(&a);
 	return a;
 }

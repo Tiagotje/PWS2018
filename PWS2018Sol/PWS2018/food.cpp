@@ -41,6 +41,5 @@ void Food::check()
 	for (b2ContactEdge* ce = body->GetContactList(); ce; ce = ce->next)
 	{
 		body->SetActive(false);
-		std::cout << "OoH Touchy Touchy" << std::endl;
 	}
 }

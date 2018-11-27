@@ -4,7 +4,7 @@
 #include <random>
 #include <vector>
 
-#define POPSIZE 15
+#define POPSIZE 25
 
 std::vector<Creature*> genPopulation();
 void mutate(Creature * c);

@@ -29,8 +29,6 @@ void Phys::updatePhysics(float fps) {
 	int32 velocityIterations = 20; //6
 	int32 positionIterations = 8;  //2
 	world.Step(1.0f / fps, velocityIterations, positionIterations);
-	if (iter % (70000) == 0)
-		std::cout << iter << " FPS: " << FPS << std::endl;
 }
 
 b2RevoluteJoint * Phys::revolute(b2Body * A, b2Body * B, b2Vec2 pos)

@@ -16,6 +16,9 @@ SimState * ss;
 
 void dab();
 
+int genID = 0;
+float gensum = 0.0f;
+
 SimState::SimState(){
 	Util::initFonts();
 	//reset geeft aan welk deel van de view op het scherm moet komen
@@ -104,7 +107,8 @@ void SimState::nextCreature()
 	else
 		f = p.x + 20 * active->foodcount;
 	fitness[creatureID] = f;
-	std::cout << "Creature " << creatureID << " has a fitness of: " << f << std::endl;
+	//std::cout << "c: " << creatureID << " f: " << f << std::endl;
+	gensum += f;
 	active->despawn();
 
 	Phys::updatePhysics(timestep);
@@ -114,12 +118,13 @@ void SimState::nextCreature()
 
 	creatureID++;
 	if (creatureID < POPSIZE) {
-		std::cout << "cID = " << creatureID << std::endl;
 		active = pop[creatureID];
 		active->spawn();
 		active->findFood();
 	} else {
-		std::cout << "NEW GEN!!!! :D :D :D" << std::endl;
+		std::cout << "Gemiddelde fitheid: " << gensum / POPSIZE << std::endl;
+		gensum = 0.0f;
+		//std::cout << "New gen: " << genID++ << std::endl;
 		pop = genNewPop(pop, fitness);
 		creatureID = 0;
 		active = pop[0];
@@ -153,7 +158,5 @@ void SimState::events(sf::Event ev)
 		sf::Vector2i pos = sf::Mouse::getPosition(window);
 		but.checkMouse(pos);
 		window.setView(mapView);
-		sf::Vector2f worldPos = window.mapPixelToCoords(pos);
-		std::cout << "X: " << worldPos.x << " Y: " << worldPos.y << std::endl;
 	}
 }

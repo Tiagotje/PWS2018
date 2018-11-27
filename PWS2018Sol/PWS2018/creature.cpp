@@ -114,7 +114,6 @@ void Creature::findFood()
 		}
 	}
 	b2Vec2 p = nearestFood;
-	std::cout << "nearest food at: " << p.x << ", " << p.y << std::endl;
 }
 
 void Creature::updateCreature()

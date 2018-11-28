@@ -21,8 +21,8 @@ std::uniform_real_distribution<> genetics::lengtemut(0,5);
 std::uniform_real_distribution<> genetics::hoekmut(0,5);
 std::uniform_real_distribution<> genetics::spiermut(0,10);
 std::uniform_real_distribution<> genetics::swapmut(0,20);
-std::uniform_real_distribution<> genetics::groeimut(0,20);
-std::uniform_real_distribution<> genetics::amputatiemut(0,20);
+std::uniform_real_distribution<> genetics::groeimut(0,10);
+std::uniform_real_distribution<> genetics::amputatiemut(0,10);
 std::uniform_real_distribution<> genetics::gewichtmut(0,25);
 std::uniform_real_distribution<> genetics::dominantiemut(0,10);
 
@@ -71,12 +71,19 @@ std::vector<Creature*> genPopulation()
 	Creature * p2 = new Creature();
 
 	p1->nn->initweights();
-	p2->nn->initweights();
+	p2->nn = p1->nn;
+
+	for (int i = 0; i < 4; i++) {
+		mutate(p1);
+		mutate(p2);
+	}
+
+	Creature * p = new Creature(p1, p2);
 
 	std::vector<Creature*> pop;
 
 	for (int i = 0; i < POPSIZE; i++) {
-		pop.push_back(new Creature(p1, p2));
+		pop.push_back(new Creature(&gengeno(p), &gengeno(p)));
 	}
 
 	return pop;
@@ -226,6 +233,7 @@ void mutate(Creature * c)
 	}
 
 	while (genetics::swapmut(gen) < 1) {
+		break; //onrealistisch
 		int tries = 0;
 		while (tries < 10) {
 			std::uniform_int_distribution<> node(0, c->limbs.size() - 1);
@@ -317,36 +325,27 @@ NN* fenonn(Creature* a, Creature* b) {
 	return nn;
 }
 
+//NEW CROSSING OVER ALGO VOOR BIJ GENGENO
+Creature * NEWcrossingover(Creature * a, Creature * b) {
+	Creature * c = new Creature();
+	c->nodes.clear();
+	for (int i = 0; i < c->limbs.size(); i++)
+		delete c->limbs[i];
+	c->limbs.clear();
+	std::uniform_int_distribution<> bg(0, 1);
+	int aNS = a->nodes.size();
+	int bNS = b->nodes.size();
+	int min = (aNS < bNS ? aNS : bNS);
+	int max = (aNS > bNS ? aNS : bNS);
+	for (int i = 0; i < min; i++)
+		c->nodes.push_back((bg(gen) == 0 ? a->nodes[i] : b->nodes[i]));
+	Creature * big = (aNS > bNS ? a : b);
+	for (int i = min; i < max; i++)
+		if (bg(gen) == 0)
+			c->nodes.push_back(big->nodes[i]);
 
-void crossingover(Creature * a, Creature * b) {
-	std::uniform_int_distribution<> genA(0, a->nodes.size() - 1);
-	std::uniform_int_distribution<> genB(0, b->nodes.size() - 1);
-	Node * na = a->limbs[genA(gen)];
-	Node * nb = b->limbs[genB(gen)];
-	Node * pna = getParent(a, na);
-	Node * pnb = getParent(b, nb);
-	if (pna == NULL)
-		for (int i = 0; i < a->nodes.size(); i++)
-			if (a->nodes[i] == na)
-				a->nodes[i] = nb;
-	if (pnb == NULL)
-		for (int i = 0; i < b->nodes.size(); i++)
-			if (b->nodes[i] == nb)
-				b->nodes[i] = na;
-	if (pna != NULL)
-		for (int i = 0; i < pna->nodes.size(); i++)
-			if (pna->nodes[i] == na)
-				pna->nodes[i] = nb;
-	if (pnb != NULL)
-		for (int i = 0; i < pnb->nodes.size(); i++)
-			if (pnb->nodes[i] == nb)
-				pnb->nodes[i] = na;
-	a->limbs.clear();
-	b->limbs.clear();
-	a->updateCreatureNodes();
-	b->updateCreatureNodes();
+	return c;
 }
-
 //a + b -> c
 //1. doe random geschud 5x
 //2. grootste dominance wint
@@ -358,8 +357,7 @@ Creature feno(Creature* p1, Creature* p2) {
 	b.limbs.clear();
 	a.updateCreatureNodes();
 	b.updateCreatureNodes();
-	for (int i = 0; i < 2; i++)
-		crossingover(&a, &b);
+	//crossingover(&a, &b);
 	a.updatePos();
 	b.updatePos();
 	float domA = 0;
@@ -424,8 +422,7 @@ Creature gengeno(Creature * c) {
 	b.limbs.clear();
 	a.updateCreatureNodes();
 	b.updateCreatureNodes();
-	for (int i = 0; i < 5; i++)
-		crossingover(&a, &b);
+	NEWcrossingover(&a, &b);
 	a.updatePos();
 	NN* na = c->parents[0]->nn;
 	NN* nb = c->parents[1]->nn;

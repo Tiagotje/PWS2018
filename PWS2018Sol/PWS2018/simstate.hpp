@@ -21,8 +21,9 @@ public:
 	void nextCreature();
 private:
 	int creatureID = 0;
-	sf::View mapView, lowerView, upperView;
+	sf::View mapView, upperView;
 	sf::VertexArray ground;
+	sf::Text info;
 	Button nextbut;
 	Button pauzebut;
 	Button slowbut;

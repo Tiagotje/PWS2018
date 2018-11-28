@@ -27,10 +27,8 @@ SimState::SimState(){
 	//Viewport geeft in fracties aan waar op het scherm deze getekend moet worden
 	upperView.reset(sf::FloatRect(0, 0, 1600, 45));
 	upperView.setViewport(sf::FloatRect(0.0f, 0.0f, 1.0f, 0.05f));
-	mapView.reset(sf::FloatRect(-1000, -300, 2000, 1000));
+	mapView.reset(sf::FloatRect(-1000, -400, 2000, 1000));
 	mapView.setViewport(sf::FloatRect(0.0f, 0.05f, 1.0f, 0.85f));
-	lowerView.reset(sf::FloatRect(0, 0, 1600, 90));
-	lowerView.setViewport(sf::FloatRect(0.0f, 0.9f, 1.0f, 0.1f));
 
 	//Genereert de grond; 
 	ground = TerrainGen();
@@ -63,6 +61,12 @@ SimState::SimState(){
 	slowbut.setColor(sf::Color::Red);
 	slowbut.setTextPos(10, 1);
 
+	//info
+	info.setFont(Util::dafont);
+	info.setString("C: 0, G: 0");
+	info.setCharacterSize(25);
+	info.setFillColor(sf::Color::White);
+	info.setPosition(900, 5);
 
 	pop = genPopulation();
 
@@ -112,19 +116,16 @@ void SimState::draw()
 	for (int i = 0; i < foodsize; i++)
 		food[i].draw();
 
-	//Tekent onderkant
-	window.setView(lowerView);
-	sf::RectangleShape rect(sf::Vector2f(1600, 90));
-	rect.setFillColor(sf::Color(80, 80, 80));
-	window.draw(rect);
-
 	//Tekent bovenkant
 	window.setView(upperView);
+	sf::RectangleShape rect(sf::Vector2f(1600, 90));
 	rect.setSize(sf::Vector2f(1600, 45));
+	rect.setFillColor(sf::Color(80, 80, 80));
 	window.draw(rect);
 	nextbut.draw();
 	slowbut.draw();
 	pauzebut.draw();
+	window.draw(info);
 }
 
 void SimState::nextCreature()
@@ -160,6 +161,9 @@ void SimState::nextCreature()
 		active->spawn();
 		active->findFood();
 	}
+
+	std::string t = "C: " + std::to_string(creatureID) + ", G: " + std::to_string(genID);
+	info.setString(t);
 }
 
 void SimState::events(sf::Event ev)

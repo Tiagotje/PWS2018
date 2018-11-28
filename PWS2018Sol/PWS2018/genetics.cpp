@@ -29,9 +29,9 @@ std::uniform_real_distribution<> genetics::dominantiemut(0,10);
 std::random_device rd;
 std::mt19937 gen(rd());
 
-std::vector<Creature*> genPopulation()
+std::vector<Creature*> OLDgenPopulation()
 {
-	//popsize = 50?
+	//gen 2 creatures
 	std::vector<Creature*> parpop;
 
 	for (int i = 0; i < POPSIZE; i++) {
@@ -61,6 +61,24 @@ std::vector<Creature*> genPopulation()
 		pop.push_back(new Creature(parpop[a], parpop[b]));
 	}
 	
+	return pop;
+}
+
+std::vector<Creature*> genPopulation()
+{
+	//gen 2 creatures
+	Creature * p1 = new Creature();
+	Creature * p2 = new Creature();
+
+	p1->nn->initweights();
+	p2->nn->initweights();
+
+	std::vector<Creature*> pop;
+
+	for (int i = 0; i < POPSIZE; i++) {
+		pop.push_back(new Creature(p1, p2));
+	}
+
 	return pop;
 }
 

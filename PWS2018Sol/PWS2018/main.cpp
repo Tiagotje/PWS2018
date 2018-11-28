@@ -19,7 +19,7 @@ sf::RenderWindow window;
 
 State * state;
 int iter = 0;
-const float timestep = 30;
+const float timestep = 60;
 const int foodsize = 400;
 b2Vec2 foodpos[400];
 Food food[400];

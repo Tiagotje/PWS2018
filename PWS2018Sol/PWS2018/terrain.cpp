@@ -83,7 +83,7 @@ void FoodposGen(std::vector<b2Vec2> data)
 {
 	std::random_device rd;
 	std::mt19937 gen(rd());
-	std::uniform_real_distribution<> dis(0, 5000);
+	std::uniform_real_distribution<> dis(10, 5000);
 
 	for (int i = 0; i < foodsize; i++)
 	{

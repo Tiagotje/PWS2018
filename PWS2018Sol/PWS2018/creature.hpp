@@ -22,7 +22,7 @@ public:
 	Head head = Head(b2Vec2(0, 0));
 	std::vector<Node*> limbs;
 	std::vector<b2RevoluteJoint*> joints;
-	float energy = 2000.0f;
+	float energy = 1000.0f; //500 -> 2.000 -> 1.000
 	int foodcount = 0;
 	void spawn();
 	void draw();

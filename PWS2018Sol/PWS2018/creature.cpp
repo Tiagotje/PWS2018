@@ -94,7 +94,7 @@ b2Vec2 Creature::getPos()
 
 void Creature::eat()
 {
-	energy +=  1000.0f;
+	energy +=  500.0f; //300 -> 1.000 -> 500
 	foodcount++;
 	findFood();
 }

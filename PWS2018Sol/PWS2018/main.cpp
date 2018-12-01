@@ -58,7 +58,7 @@ int main()
 			Phys::updatePhysics(timestep);
 		}
 
-		if (slow | clock.getElapsedTime() > sf::milliseconds(15)) {
+		if (slow | clock.getElapsedTime() > sf::milliseconds(100)) {
 			frame++;
 			state->draw();
 			window.display();

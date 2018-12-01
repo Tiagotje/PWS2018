@@ -56,8 +56,8 @@ void Limb::spawn()
 	b2FixtureDef fd;
 	fd.shape = &poly;
 	fd.density = 1.0f;
-	fd.friction = 0.5f;
-	fd.restitution = 0.15f;
+	fd.friction = 0.95f;
+	fd.restitution = 0.05f;
 	fd.filter.categoryBits = 2;
 	fd.filter.maskBits = 1;
 	body->CreateFixture(&fd);
@@ -124,8 +124,8 @@ void Head::spawn()
 	b2FixtureDef fd;
 	fd.shape = &cs;
 	fd.density = 0.3f;
-	fd.friction = 0.3f;
-	fd.restitution = 0.2f;
+	fd.friction = 0.95f;
+	fd.restitution = 0.05f;
 	fd.filter.categoryBits = 2;
 	fd.filter.maskBits = 1;
 	body->CreateFixture(&fd);

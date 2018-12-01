@@ -19,12 +19,11 @@
 
 std::uniform_real_distribution<> genetics::lengtemut(0,5);
 std::uniform_real_distribution<> genetics::hoekmut(0,5);
-std::uniform_real_distribution<> genetics::spiermut(0,10);
-std::uniform_real_distribution<> genetics::swapmut(0,20);
-std::uniform_real_distribution<> genetics::groeimut(0,10);
-std::uniform_real_distribution<> genetics::amputatiemut(0,10);
-std::uniform_real_distribution<> genetics::gewichtmut(0,25);
-std::uniform_real_distribution<> genetics::dominantiemut(0,10);
+std::uniform_real_distribution<> genetics::spiermut(0,20);
+std::uniform_real_distribution<> genetics::groeimut(0,15);
+std::uniform_real_distribution<> genetics::amputatiemut(0,15);
+std::uniform_real_distribution<> genetics::gewichtmut(0,15);
+std::uniform_real_distribution<> genetics::dominantiemut(0,5);
 
 std::random_device rd;
 std::mt19937 gen(rd());
@@ -73,7 +72,7 @@ std::vector<Creature*> genPopulation()
 	p1->nn->initweights();
 	p2->nn = p1->nn;
 
-	for (int i = 0; i < 4; i++) {
+	for (int i = 0; i < 2; i++) {
 		mutate(p1);
 		mutate(p2);
 	}
@@ -231,44 +230,6 @@ void mutate(Creature * c)
 			}
 		}
 	}
-
-	while (genetics::swapmut(gen) < 1) {
-		break; //onrealistisch
-		int tries = 0;
-		while (tries < 10) {
-			std::uniform_int_distribution<> node(0, c->limbs.size() - 1);
-			Node * a = c->limbs[node(gen)];
-			Node * b = c->limbs[node(gen)];
-			if (a->contains(b) || b->contains(a) || a == b) {
-				tries++;
-				continue;
-			}
-			Node * pa = getParent(c, a);
-			Node * pb = getParent(c, b);
-			if (pa != NULL) {
-				for (int i = 0; i < pa->nodes.size(); i++)
-					if (pa->nodes[i] == a)
-						pa->nodes[i] = b;
-			}
-			else {
-				for (int i = 0; i < c->nodes.size(); i++)
-					if (c->nodes[i] == a)
-						c->nodes[i] = b;
-			}
-
-			if (pb != NULL) {
-				for (int i = 0; i < pb->nodes.size(); i++)
-					if (pb->nodes[i] == b)
-						pb->nodes[i] = a;
-			}
-			else {
-				for (int i = 0; i < c->nodes.size(); i++)
-					if (c->nodes[i] == b)
-						c->nodes[i] = a;
-			}
-			break;
-		}
-	}
 }
 
 void mutategenotype(Creature* p) {
@@ -283,7 +244,6 @@ void mutategenotype(Creature* p) {
 	for (int i = 0; i < HIDDENSIZE; i++)
 		if (genetics::dominantiemut(gen) < 1)
 			p->nn->dominance2[i] = randD();
-			
 }
 
 void mutateNN(NN* nn) {
@@ -325,8 +285,8 @@ NN* fenonn(Creature* a, Creature* b) {
 	return nn;
 }
 
-//NEW CROSSING OVER ALGO VOOR BIJ GENGENO
-Creature * NEWcrossingover(Creature * a, Creature * b) {
+//NEW CROSSING OVER ALGO VOOR BIJ GENGENO  (dom = dominance or random?)
+Creature * NEWcrossingover(Creature * a, Creature * b, bool dom) {
 	Creature * c = new Creature();
 	c->nodes.clear();
 	for (int i = 0; i < c->limbs.size(); i++)
@@ -337,13 +297,17 @@ Creature * NEWcrossingover(Creature * a, Creature * b) {
 	int bNS = b->nodes.size();
 	int min = (aNS < bNS ? aNS : bNS);
 	int max = (aNS > bNS ? aNS : bNS);
-	for (int i = 0; i < min; i++)
-		c->nodes.push_back((bg(gen) == 0 ? a->nodes[i] : b->nodes[i]));
+	for (int i = 0; i < min; i++) {
+		if (dom)
+			c->nodes.push_back(a->nodes[i]->dominance > b->nodes[i]->dominance ? a->nodes[i] : b->nodes[i]);
+		else
+			c->nodes.push_back((bg(gen) == 0 ? a->nodes[i] : b->nodes[i]));
+	}
 	Creature * big = (aNS > bNS ? a : b);
-	for (int i = min; i < max; i++)
+	for (int i = min; i < max; i++) {
 		if (bg(gen) == 0)
 			c->nodes.push_back(big->nodes[i]);
-
+	}
 	return c;
 }
 //a + b -> c
@@ -357,18 +321,17 @@ Creature feno(Creature* p1, Creature* p2) {
 	b.limbs.clear();
 	a.updateCreatureNodes();
 	b.updateCreatureNodes();
-	//crossingover(&a, &b);
-	a.updatePos();
-	b.updatePos();
-	float domA = 0;
-	float domB = 0;
-	for (int i = 0; i < a.limbs.size(); i++)
-		domA += a.limbs[i]->dominance;
-	for (int i = 0; i < b.limbs.size(); i++)
-		domB += b.limbs[i]->dominance;
-	domA = domA / a.limbs.size();
-	domB = domB / b.limbs.size();
-	return (domA > domB ? a : b);
+	//realistisch aber werkt SHIT
+	Creature * c = NEWcrossingover(&a, &b, true);
+	c->updatePos();
+	//float sumA = 0;
+	//for (int i = 0; i < a.limbs.size(); i++)
+	//	sumA += a.limbs[i]->dominance;
+	//float sumB = 0;
+	//for (int i = 0; i < b.limbs.size(); i++)
+	//	sumB += b.limbs[i]->dominance;
+	//return (sumA / a.limbs.size() > sumB / b.limbs.size() ? a : b);
+	return *c;
 }
 
 
@@ -422,7 +385,7 @@ Creature gengeno(Creature * c) {
 	b.limbs.clear();
 	a.updateCreatureNodes();
 	b.updateCreatureNodes();
-	NEWcrossingover(&a, &b);
+	NEWcrossingover(&a, &b, false);
 	a.updatePos();
 	NN* na = c->parents[0]->nn;
 	NN* nb = c->parents[1]->nn;

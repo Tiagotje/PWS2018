@@ -99,8 +99,7 @@ void SimState::calculate()
 	if (active->getPos().x < -20.0f)
 		nextCreature();
 	active->calculate();
-	for (int i = 0; i < foodsize; i++)
-		food[i].check();
+	active->checkfood();
 }
 
 
@@ -135,7 +134,7 @@ void SimState::nextCreature()
 	if (p.x < 0)
 		f = 0;
 	else
-		f = p.x + 20 * active->foodcount;
+		f = p.x + 30 * active->foodcount;
 	fitness[creatureID] = f;
 	//std::cout << "c: " << creatureID << " f: " << f << std::endl;
 	gensum += f;

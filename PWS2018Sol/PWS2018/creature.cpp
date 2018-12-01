@@ -25,6 +25,7 @@ Creature::Creature(Creature * a, Creature * b)
 	parents[1] = new Creature(b);
 	nn = fenonn(a, b);
 	Creature f = feno(a, b);
+	f.updatePos();
 	nodes = f.nodes;
 	updateCreatureNodes();
 }
@@ -94,7 +95,7 @@ b2Vec2 Creature::getPos()
 
 void Creature::eat()
 {
-	energy +=  500.0f; //300 -> 1.000 -> 500
+	energy +=  125.0f; 
 	foodcount++;
 	findFood();
 }
@@ -231,8 +232,8 @@ bool Node::contains(Node* n)
 void Creature::updateCreatureNodes()
 {
 	for (int i = 0; i < nodes.size(); i++) {
-		nodes[i]->updateCreatureLimbs(this);
 		nodes[i]->deep = 0;
+		nodes[i]->updateCreatureLimbs(this);
 	}
 }
 
@@ -240,8 +241,8 @@ void Node::updateCreatureLimbs(Creature * c) {
 	creature = c;
 	c->limbs.push_back(this);
 	for (int i = 0; i < nodes.size(); i++) {
-		nodes[i]->updateCreatureLimbs(c);
 		nodes[i]->deep = deep + 1;
+		nodes[i]->updateCreatureLimbs(c);
 	}
 }
 
@@ -252,4 +253,10 @@ Node::Node(Node * n) {
 	limb = Limb(n->limb.getBegin(), n->limb.length, n->limb.sAngle);
 	for (int i = 0; i < n->nodes.size(); i++)
 		nodes.push_back( new Node( n->nodes[i] ) );
+}
+
+void Creature::checkfood(){
+	for (int i = 0; i < foodsize; i++)
+		if (food[i].check())
+			eat();
 }

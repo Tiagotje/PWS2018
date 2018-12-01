@@ -26,8 +26,8 @@ void Phys::initPhysics() {
 }
 
 void Phys::updatePhysics(float fps) {
-	int32 velocityIterations = 20; //6
-	int32 positionIterations = 8;  //2
+	int32 velocityIterations = 8; 
+	int32 positionIterations = 3; 
 	world.Step(1.0f / fps, velocityIterations, positionIterations);
 }
 

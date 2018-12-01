@@ -12,5 +12,5 @@ public:
 	sf::CircleShape shape;
 	b2Body * body;
 	void draw();
-	void check();
+	bool check();
 };

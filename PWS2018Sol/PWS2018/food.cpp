@@ -6,6 +6,7 @@
 
 #include "physics.hpp"
 #include "main.hpp"
+#include "creature.hpp"
 
 Food::Food(b2Vec2 pos)
 {
@@ -36,10 +37,15 @@ void Food::draw()
 	window.draw(shape);
 }
 
-void Food::check()
+bool Food::check()
 {
 	for (b2ContactEdge* ce = body->GetContactList(); ce; ce = ce->next)
 	{
-		body->SetActive(false);
+		if (ce->contact->IsTouching()) {
+			body->SetActive(false);
+			return true;
+		}
 	}
+
+	return false;
 }

@@ -2,8 +2,9 @@
 
 #include <SFML/Graphics.hpp>
 #include <Box2D\Box2D.h>
-#include "state.hpp"
 #include "food.hpp"
+#include "state.hpp"
+
 
 //extern, omdat de definitie in main.cpp moet staan
 extern sf::RenderWindow window;

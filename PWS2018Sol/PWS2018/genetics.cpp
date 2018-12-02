@@ -19,11 +19,20 @@
 
 std::uniform_real_distribution<> genetics::lengtemut(0,5);
 std::uniform_real_distribution<> genetics::hoekmut(0,5);
+<<<<<<< HEAD
 std::uniform_real_distribution<> genetics::spiermut(0,20);
 std::uniform_real_distribution<> genetics::groeimut(0,15);
 std::uniform_real_distribution<> genetics::amputatiemut(0,15);
 std::uniform_real_distribution<> genetics::gewichtmut(0,100);
 std::uniform_real_distribution<> genetics::dominantiemut(0,5);
+=======
+std::uniform_real_distribution<> genetics::spiermut(0,10);
+std::uniform_real_distribution<> genetics::swapmut(0,20);
+std::uniform_real_distribution<> genetics::groeimut(0,20);
+std::uniform_real_distribution<> genetics::amputatiemut(0,20);
+std::uniform_real_distribution<> genetics::gewichtmut(0,25);
+std::uniform_real_distribution<> genetics::dominantiemut(0,10);
+>>>>>>> parent of 3ad8411... Evaluatieveranderingen 3
 
 std::random_device rd;
 std::mt19937 gen(rd());
@@ -36,6 +45,7 @@ std::vector<Creature*> genPopulation()
 	Creature * p2 = new Creature();
 
 	p1->nn->initweights();
+<<<<<<< HEAD
 	p2->nn = p1->nn;
 
 	for (int i = 0; i < 2; i++) {
@@ -44,11 +54,14 @@ std::vector<Creature*> genPopulation()
 	}
 
 	Creature * p = new Creature(p1, p2);
+=======
+	p2->nn->initweights();
+>>>>>>> parent of 3ad8411... Evaluatieveranderingen 3
 
 	std::vector<Creature*> pop;
 
 	for (int i = 0; i < POPSIZE; i++) {
-		pop.push_back(new Creature(&gengeno(p), &gengeno(p)));
+		pop.push_back(new Creature(p1, p2));
 	}
 
 	return pop;
@@ -222,6 +235,46 @@ void mutate(Creature * c)
 			}
 		}
 	}
+<<<<<<< HEAD
+=======
+
+	while (genetics::swapmut(gen) < 1) {
+		int tries = 0;
+		while (tries < 10) {
+			std::uniform_int_distribution<> node(0, c->limbs.size() - 1);
+			Node * a = c->limbs[node(gen)];
+			Node * b = c->limbs[node(gen)];
+			if (a->contains(b) || b->contains(a) || a == b) {
+				tries++;
+				continue;
+			}
+			Node * pa = getParent(c, a);
+			Node * pb = getParent(c, b);
+			if (pa != NULL) {
+				for (int i = 0; i < pa->nodes.size(); i++)
+					if (pa->nodes[i] == a)
+						pa->nodes[i] = b;
+			}
+			else {
+				for (int i = 0; i < c->nodes.size(); i++)
+					if (c->nodes[i] == a)
+						c->nodes[i] = b;
+			}
+
+			if (pb != NULL) {
+				for (int i = 0; i < pb->nodes.size(); i++)
+					if (pb->nodes[i] == b)
+						pb->nodes[i] = a;
+			}
+			else {
+				for (int i = 0; i < c->nodes.size(); i++)
+					if (c->nodes[i] == b)
+						c->nodes[i] = a;
+			}
+			break;
+		}
+	}
+>>>>>>> parent of 3ad8411... Evaluatieveranderingen 3
 }
 
 void mutategenotype(Creature* p) {
@@ -277,6 +330,7 @@ NN* fenonn(Creature* a, Creature* b) {
 	return nn;
 }
 
+<<<<<<< HEAD
 //NEW CROSSING OVER ALGO VOOR BIJ GENGENO  (dom = dominance or random?)
 Creature * NEWcrossingover(Creature * a, Creature * b, bool dom) {
 	Creature * c = new Creature();
@@ -301,7 +355,38 @@ Creature * NEWcrossingover(Creature * a, Creature * b, bool dom) {
 			c->nodes.push_back(big->nodes[i]);
 	}
 	return c;
+=======
+
+void crossingover(Creature * a, Creature * b) {
+	std::uniform_int_distribution<> genA(0, a->nodes.size() - 1);
+	std::uniform_int_distribution<> genB(0, b->nodes.size() - 1);
+	Node * na = a->limbs[genA(gen)];
+	Node * nb = b->limbs[genB(gen)];
+	Node * pna = getParent(a, na);
+	Node * pnb = getParent(b, nb);
+	if (pna == NULL)
+		for (int i = 0; i < a->nodes.size(); i++)
+			if (a->nodes[i] == na)
+				a->nodes[i] = nb;
+	if (pnb == NULL)
+		for (int i = 0; i < b->nodes.size(); i++)
+			if (b->nodes[i] == nb)
+				b->nodes[i] = na;
+	if (pna != NULL)
+		for (int i = 0; i < pna->nodes.size(); i++)
+			if (pna->nodes[i] == na)
+				pna->nodes[i] = nb;
+	if (pnb != NULL)
+		for (int i = 0; i < pnb->nodes.size(); i++)
+			if (pnb->nodes[i] == nb)
+				pnb->nodes[i] = na;
+	a->limbs.clear();
+	b->limbs.clear();
+	a->updateCreatureNodes();
+	b->updateCreatureNodes();
+>>>>>>> parent of 3ad8411... Evaluatieveranderingen 3
 }
+
 //a + b -> c
 //1. doe random geschud 5x
 //2. grootste dominance wint
@@ -313,6 +398,7 @@ Creature feno(Creature* p1, Creature* p2) {
 	b.limbs.clear();
 	a.updateCreatureNodes();
 	b.updateCreatureNodes();
+<<<<<<< HEAD
 	//realistisch aber werkt SHIT
 	Creature * c = NEWcrossingover(&a, &b, true);
 	c->updatePos();
@@ -324,6 +410,21 @@ Creature feno(Creature* p1, Creature* p2) {
 	//	sumB += b.limbs[i]->dominance;
 	//return (sumA / a.limbs.size() > sumB / b.limbs.size() ? a : b);
 	return *c;
+=======
+	for (int i = 0; i < 2; i++)
+		crossingover(&a, &b);
+	a.updatePos();
+	b.updatePos();
+	float domA = 0;
+	float domB = 0;
+	for (int i = 0; i < a.limbs.size(); i++)
+		domA += a.limbs[i]->dominance;
+	for (int i = 0; i < b.limbs.size(); i++)
+		domB += b.limbs[i]->dominance;
+	domA = domA / a.limbs.size();
+	domB = domB / b.limbs.size();
+	return (domA > domB ? a : b);
+>>>>>>> parent of 3ad8411... Evaluatieveranderingen 3
 }
 
 
@@ -377,7 +478,12 @@ Creature gengeno(Creature * c) {
 	b.limbs.clear();
 	a.updateCreatureNodes();
 	b.updateCreatureNodes();
+<<<<<<< HEAD
 	NEWcrossingover(&a, &b, false);
+=======
+	for (int i = 0; i < 5; i++)
+		crossingover(&a, &b);
+>>>>>>> parent of 3ad8411... Evaluatieveranderingen 3
 	a.updatePos();
 	NN* na = c->parents[0]->nn;
 	NN* nb = c->parents[1]->nn;

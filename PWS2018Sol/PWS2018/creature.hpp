@@ -53,7 +53,6 @@ public:
 	std::vector<Node*> nodes;
 	float dominance;
 	float angle;
-	int deep = 0;
 	void spawn(b2Body * parent);
 	void draw();
 	void addNode(float l, float a, int n, float d);

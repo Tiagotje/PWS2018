@@ -193,7 +193,7 @@ void Node::setSpeed(float v)
 {
 	joint->SetMotorSpeed(v);
 	joint->EnableMotor(true);
-	joint->SetMaxMotorTorque(2000);
+	joint->SetMaxMotorTorque(1000);
 }
 
 void Creature::updatePos()
@@ -232,19 +232,29 @@ bool Node::contains(Node* n)
 
 void Creature::updateCreatureNodes()
 {
+<<<<<<< HEAD
 	for (int i = 0; i < nodes.size(); i++) {
 		nodes[i]->deep = 0;
 		nodes[i]->updateCreatureLimbs(this);
 	}
+=======
+	for (int i = 0; i < nodes.size(); i++)
+		nodes[i]->updateCreatureLimbs(this);
+>>>>>>> parent of 3ad8411... Evaluatieveranderingen 3
 }
 
 void Node::updateCreatureLimbs(Creature * c) {
 	creature = c;
 	c->limbs.push_back(this);
+<<<<<<< HEAD
 	for (int i = 0; i < nodes.size(); i++) {
 		nodes[i]->deep = deep + 1;
 		nodes[i]->updateCreatureLimbs(c);
 	}
+=======
+	for (int i = 0; i < nodes.size(); i++)
+		nodes[i]->updateCreatureLimbs(c);
+>>>>>>> parent of 3ad8411... Evaluatieveranderingen 3
 }
 
 Node::Node(Node * n) {

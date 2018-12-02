@@ -44,6 +44,7 @@ Creature::~Creature()
 
 void Creature::spawn()
 {
+	joints = std::vector<b2RevoluteJoint*>();
 	head.spawn();
 	for (int i = 0; i < nodes.size(); i++) {
 		nodes[i]->spawn(head.body);

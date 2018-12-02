@@ -4,7 +4,7 @@
 #include <random>
 #include <vector>
 
-#define POPSIZE 35
+#define POPSIZE 3
 
 std::vector<Creature*> genPopulation();
 void mutate(Creature * c);
@@ -12,8 +12,8 @@ void mutategenotype(Creature * p);
 NN* fenonn(Creature* a, Creature* b);
 Creature feno(Creature * a, Creature * b);
 Creature gengeno(Creature * c);
+Creature newGengeno(Creature * c);
 std::vector<Creature *> genNewPop(std::vector<Creature *> old, float * fitness);
-
 
 namespace genetics {
 	extern std::uniform_real_distribution<> lengtemut;

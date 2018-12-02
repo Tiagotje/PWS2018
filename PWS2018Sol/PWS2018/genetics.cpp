@@ -15,53 +15,19 @@
 //dominantie 1/8 per ding! yes
 //
 //MENTAAL:
-//Verandering gewicht = 1/10 per gewicht!
+//Verandering gewicht = 1/100 per gewicht!
 
 std::uniform_real_distribution<> genetics::lengtemut(0,5);
 std::uniform_real_distribution<> genetics::hoekmut(0,5);
 std::uniform_real_distribution<> genetics::spiermut(0,20);
 std::uniform_real_distribution<> genetics::groeimut(0,15);
 std::uniform_real_distribution<> genetics::amputatiemut(0,15);
-std::uniform_real_distribution<> genetics::gewichtmut(0,15);
+std::uniform_real_distribution<> genetics::gewichtmut(0,100);
 std::uniform_real_distribution<> genetics::dominantiemut(0,5);
 
 std::random_device rd;
 std::mt19937 gen(rd());
 
-std::vector<Creature*> OLDgenPopulation()
-{
-	//gen 2 creatures
-	std::vector<Creature*> parpop;
-
-	for (int i = 0; i < POPSIZE; i++) {
-		parpop.push_back(new Creature());
-		parpop[i]->nn->initweights();
-	}
-
-	for (int i = 0; i < POPSIZE; i++) {
-		for (int j = 0; j < 10; j++)
-			mutate(parpop[i]);
-		parpop[i]->updatePos();
-	}
-
-	for (int i = 0; i < POPSIZE; i++) {
-		parpop[i]->limbs.clear();
-		parpop[i]->updateCreatureNodes();
-	}
-
-	std::vector<Creature*> pop;
-
-	std::uniform_int_distribution<> chooseparents(0, POPSIZE - 1);
-	for (int i = 0; i < POPSIZE; i++) {
-		int a = chooseparents(gen);
-		int b = chooseparents(gen);
-		if (a == b)
-			b = (b + 1) % POPSIZE;
-		pop.push_back(new Creature(parpop[a], parpop[b]));
-	}
-	
-	return pop;
-}
 
 std::vector<Creature*> genPopulation()
 {
@@ -88,7 +54,7 @@ std::vector<Creature*> genPopulation()
 	return pop;
 }
 
-std::vector<int> roulette(std::vector<Creature *> old, float * fitness) {
+std::vector<int> roulette(float * fitness) {
 	std::vector<int> ret;
 
 	std::vector<int> list;
@@ -116,17 +82,43 @@ std::vector<int> roulette(std::vector<Creature *> old, float * fitness) {
 	return ret;
 }
 
-std::vector<Creature *> genNewPop(std::vector<Creature *> old, float * fitness) {
+int NEWroulette(float * fitness) {
+	std::vector<int> list;
+	for (int i = 0; i < POPSIZE; i++) {
+		int v = (int)fitness[i];
+		for (int j = 0; j < v; j++)
+			list.push_back(i);
+	}
+
+	if (list.size() == 0)
+		return 0;
+	std::uniform_int_distribution<> dist1(0, list.size() - 1);
+	return list[dist1(gen)];
+}
+
+std::vector<Creature *> OLDgenNewPop(std::vector<Creature *> old, float * fitness) {
 	std::vector<Creature *> newpop;
-	float sum = 0.0f;
-	for (int i = 0; i < POPSIZE; i++)
-		sum += fitness[i];
 
 	for (int i = 0; i < POPSIZE; i++) {
-		std::vector<int> ids = roulette(old, fitness);
+		std::vector<int> ids = roulette(fitness);
 		Creature a = gengeno(old[ids[0]]);
 		Creature b = gengeno(old[ids[1]]);
 		newpop.push_back(new Creature(&a, &b));
+	}
+	return newpop;
+}
+
+std::vector<Creature *> genNewPop(std::vector<Creature *> old, float * fitness) {
+	std::vector<Creature *> newpop;
+	
+	for (int i = 0; i < POPSIZE; i++) {
+		int n = NEWroulette(fitness);
+		Creature a = newGengeno(old[i]);
+		a.head = Head(b2Vec2(0,0));
+		a.nn = old[i]->nn;
+		newpop.push_back(new Creature(a));
+		newpop[i]->limbs.clear();
+		newpop[i]->updateCreatureNodes();
 	}
 	return newpop;
 }
@@ -394,5 +386,16 @@ Creature gengeno(Creature * c) {
 	a.nn = na;
 	mutate(&a);
 	mutategenotype(&a);
+	return a;
+}
+
+Creature newGengeno(Creature * c) {
+	Creature a = Creature(c);
+	a.limbs.clear();
+	a.updateCreatureNodes();
+	//mutate(&a);
+	a.nn = c->nn;
+	a.updatePos();
+	//mutateNN(a.nn);
 	return a;
 }
